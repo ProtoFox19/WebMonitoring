@@ -1,0 +1,114 @@
+/*LOGIN*/
+.card.login{
+    margin: 0 auto;
+    margin-top: 10px;
+    max-width: 600px;
+}
+
+.card.login > .card-header{
+    text-align: center;
+}
+
+.card.login img{
+    width: 50%;
+}
+
+@media (max-width: 767px) {
+    .card.login img{
+        width: 80%;
+    }
+}
+
+.card.login [type="checkbox"]:not(:checked),
+.card.login [type="checkbox"]:checked {
+    display: none;
+}
+.card.login [type="checkbox"]:not(:checked) + label,
+.card.login [type="checkbox"]:checked + label {
+    position: relative;
+    padding-left: 2.2em;
+    cursor: pointer;
+}
+
+
+.card.login [type="checkbox"]:not(:checked) + label:before,
+.card.login [type="checkbox"]:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 1.25em; height: 1.25em;
+    border: 1px solid #ced4da;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: inset 0.5px 0.5px 1px rgba(0,0,0,.3);
+}
+
+.card.login [type="checkbox"]:not(:checked) + label:after,
+.card.login [type="checkbox"]:checked + label:after {
+    content: '\f00c';
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    position: absolute;
+    top: .1em;
+    left: .2em;
+    font-size: 1.3em;
+    line-height: 0.8;
+    color: #003A61;
+    transition: all .2s;
+}
+
+.card.login [type="checkbox"]:not(:checked) + label:after {
+    opacity: 0;
+    transform: scale(0);
+}
+.card.login [type="checkbox"]:checked + label:after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.card.login label:hover:before {
+    border: 2px solid #F7A800 !important;
+}
+
+.input-group{
+    padding-bottom: 10px;
+}
+
+.input-group-addon {
+    color: #003A61;
+}
+
+input.form-control{
+    box-shadow: inset 0 0 0px 9999px white !important;
+}
+
+input.form-control:focus{
+    border: 1px solid #F7A800 !important;
+
+}
+
+.card.login .btn{
+    width: 40%;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #003A61;
+    border-color: #003A61;
+}
+
+.btn-primary:hover {
+    background-color: #074570;
+    border-color: #074570;
+}
+
+.btn-primary:focus {
+    box-shadow: none !important;
+    background-color: #074570 !important;
+    border-color: #074570 !important;
+}
+
+
+/*LOGIN END*/

@@ -9,12 +9,12 @@
 namespace AppBundle\Controller;
 
 
-use FOS\UserBundle\Controller\SecurityController;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
-class WebController extends SecurityController
+class WebController extends Controller
 {
     /**
      * @Route("/", name="homepage")
