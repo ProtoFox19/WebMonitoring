@@ -19,10 +19,11 @@ class WebController extends Controller
     /**
      * @Route("/", name="homepage")
      */
-    public function showAction()
+    public function showMainPage()
     {
         return $this->render('web/show.html.twig', [
-            'testVariable' => 'hallo'
+            'testVariable' => 'hallo',
+            'page' => 'start'
         ]);
     }
 }
