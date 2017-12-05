@@ -28,7 +28,7 @@
                             <span class="burger"></span>
                             <span class="burger"></span>
                             <ul class="navigation">
-                                <li {% if page is defined and page == 'start' %}class="active"{% endif %}><a href="/" title="Startpage">Start</a></li>
+                                <li {% if page is defined and page == 'start' %}class="active"{% endif %}><a href="{{ path('homepage') }}" title="Startpage">Start</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}<li {% if page is defined and page == 'newUser' %}class="active"{% endif %}><a href="/register" title="">New User</a></li>{% endif %}
                                 {% if is_granted('ROLE_ADMIN') %} <li {% if page is defined and page == 'settings' %}class="active"{% endif %}><a href="" title="">Settings</a></li>{% endif %}
                                 <li {% if page is defined and page == 'changePasswort' %}class="active"{% endif %}><a href="/profile/change-password" title="">Change Password</a></li>
@@ -38,6 +38,12 @@
                     </nav>
                 </div>
             {% endblock %}
+
+            {% for msg in app.session.flashBag.get('success') %}
+                <div class="alert alert-success">
+                    {{ msg }}
+                </div>
+            {% endfor %}
 
             {% block body %}{% endblock %}
         </div>

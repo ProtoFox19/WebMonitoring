@@ -21,6 +21,7 @@ a:hover, a:focus{
 
 .container{
     min-height: 85vh;
+    min-width: 300px;
     overflow-x: hidden;
 }
 
@@ -147,7 +148,7 @@ input.form-control:focus{
 /*LOGIN END*/
 
 
-/*STARTPAGE*/
+/*HEADER*/
 .row.header{
     height: 50px;
     border-bottom: 1px solid #003A61;
@@ -332,5 +333,66 @@ li.active{
         height: 60px;
     }
 }
-/*STARTPAGE END*/
+/*HEADER END*/
+
+/*HOMEPAGE/STARTPAGE*/
+.accordion {
+    position: relative;
+    margin: 5px 15px 5px 15px;
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid #003A61;
+    border-bottom: 1px solid #003A61;
+}
+.accordion input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+}
+.accordion label {
+    position: relative;
+    display: flex;
+    background: #f7f7f7;
+    min-height: 40px;
+    cursor: pointer;
+    margin: 0;
+    padding-left: 5px;
+    align-items: center;
+}
+
+.expand {
+    max-height: 0;
+    overflow: hidden;
+    background: #fff;
+    -webkit-transition: max-height .35s;
+    -o-transition: max-height .35s;
+    transition: max-height .35s;
+}
+
+.accordion input:checked ~ .expand {
+    max-height: 10em;
+}
+
+.accordion label::after {
+    content: "";
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    width: 0;
+    height: 0;
+    top: 15px;
+    border-style: solid;
+    border-width: 10px 6px 0 6px;
+    border-color: #003A61 transparent transparent;
+    transition: border-bottom .1s, border-top .1s .1s;
+}
+
+.accordion input[type=checkbox]:checked + label::after {
+    border-width: 0 6px 10px 6px;
+    border-color: transparent transparent #f7a800 transparent;
+    transition: border-top .1s, border-bottom .1s .1s;
+}
+
+
+/*HOMEPAGE/STARTPAGE END*/
 

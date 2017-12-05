@@ -1,4 +1,17 @@
 {% extends 'base.html.twig' %}
+
+
 {% block body %}
-<h1>{{ testVariable }}</h1>
+    {{ dump(webs) }}
+    <div class="row">
+        {% for web in webs %}
+            <div class="accordion">
+                <input id="{{ web.name }}" type="checkbox">
+                <label for="{{ web.name }}">{{ web.name }} | {{ web.domain }}</label>
+                <div class="expand">
+                    <a href="{{ path('delete_web', {'id': web.id }) }}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
