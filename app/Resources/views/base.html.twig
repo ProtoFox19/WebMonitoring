@@ -17,6 +17,7 @@
     <body>
         <div class="container">
             {% block header %}
+                {{ app.request.get('_route') }}
                 <div class="row header">
                     <div class="headerlogo col-md-4 col-sm-6 col-8">
                         <img src="{{ asset('images/PM_Logo.svg') }}" alt="Logo">

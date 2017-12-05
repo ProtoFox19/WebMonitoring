@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 
 
+use AppBundle\Entity\Web;
 use AppBundle\Form\WebFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,7 +24,7 @@ class WebController extends Controller
      */
     public function showMainPageAction()
     {
-        $webs = $this->getWebs();
+        $webs = $this->get('AppBundle\Service\WebService')->getWebs();
         return $this->render('web/show.html.twig', [
             'testVariable' => 'hallo',
             'page' => 'start',
@@ -31,12 +32,7 @@ class WebController extends Controller
         ]);
     }
 
-    private function getWebs(){
-        $em = $this->getDoctrine()->getManager();
-        $webs = $em->getRepository('AppBundle:Web')
-            ->findAll();
-        return $webs;
-    }
+
 
     /**
      * @Route("/new", name="newWeb")
@@ -65,15 +61,15 @@ class WebController extends Controller
     /**
      * @Route("/{id}/delete", requirements={"id" = "\d+"}, name="delete_web")
      */
-    public function deleteWebAction($id){
+    public function deleteWebAction(Web $web){
         $em = $this->getDoctrine()->getManager();
-        $web = $em->getRepository('AppBundle:Web')->find($id);
+       /* $web = $em->getRepository('AppBundle:Web')->find($id);
 
         if (!$web) {
             throw $this->createNotFoundException(
                 'No web found for id '.$id
             );
-        }
+        }*/
 
         $em->remove($web);
         $em->flush();
