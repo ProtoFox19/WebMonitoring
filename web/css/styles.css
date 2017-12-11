@@ -31,6 +31,39 @@ a:hover, a:focus{
     }
 }
 
+.btn-primary {
+    background-color: #003A61;
+    border-color: #003A61;
+}
+
+.btn-primary:hover {
+    background-color: #074570;
+    border-color: #074570;
+}
+
+.btn-primary:focus {
+    box-shadow: none !important;
+    background-color: #074570 !important;
+    border-color: #074570 !important;
+}
+
+.btn.btn-danger{
+    color: #fff;
+}
+
+.btn.btn-danger:hover{
+    color: #000;
+}
+
+.btn.btn-default{
+    background-color: #003A61;
+    color: #fff;
+}
+
+.btn.btn-default:hover{
+    background-color: #074570;
+    color: #000;
+}
 
 
 /*LOGIN*/
@@ -129,22 +162,6 @@ input.form-control:focus{
     cursor: pointer;
 }
 
-.btn-primary {
-    background-color: #003A61;
-    border-color: #003A61;
-}
-
-.btn-primary:hover {
-    background-color: #074570;
-    border-color: #074570;
-}
-
-.btn-primary:focus {
-    box-shadow: none !important;
-    background-color: #074570 !important;
-    border-color: #074570 !important;
-}
-
 /*LOGIN END*/
 
 
@@ -204,7 +221,9 @@ nav.headerNavigation{
 .navigation > li:hover {
 }
 
-li.active{
+.navigation > li.active > a{
+    color: #f7a800;
+    border-bottom: 3px solid #f7a800;
 }
 
 .navigation > li > a{
@@ -341,8 +360,8 @@ li.active{
     margin: 5px 15px 5px 15px;
     width: 100%;
     overflow: hidden;
-    border-top: 1px solid #003A61;
-    border-bottom: 1px solid #003A61;
+    border: 1px solid #003A61;
+    border-radius: 5px;
 }
 .accordion input {
     position: absolute;
@@ -360,7 +379,22 @@ li.active{
     align-items: center;
 }
 
+.accordion label span.name{
+    width: 30%;
+    min-width: 125px;
+    word-wrap: break-word;
+}
+.accordion label span.domain{
+    padding-left: 20px;
+    padding-right: 25px;
+    word-wrap: break-word;
+    width: 70%;
+    min-width: 125px;
+}
+
+
 .expand {
+    position: relative;
     max-height: 0;
     overflow: hidden;
     background: #fff;
@@ -371,6 +405,37 @@ li.active{
 
 .accordion input:checked ~ .expand {
     max-height: 10em;
+    overflow: auto;
+}
+
+.expand .webButtons{
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    width: 24%;
+}
+
+.expand .webButtons > a{
+    float: right;
+}
+
+.expand .webButtons .btn.btn-danger{
+    height: 22px;
+    width: 60px;
+    font-size: 16px;
+    padding: 2px;
+    line-height: 1;
+}
+
+.expand .bundles{
+    min-height: 40px;
+    width: 65%;
+}
+
+.expand .bundles .bundleLinks{
+    display: block;
+    float: left;
+    width: 100px;
 }
 
 .accordion label::after {
@@ -393,6 +458,67 @@ li.active{
     transition: border-top .1s, border-bottom .1s .1s;
 }
 
+
+/*delete message*/
+
+.delete {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    transition: opacity 200ms;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 2;
+}
+.delete:target {
+    visibility: visible;
+    opacity: 1;
+}
+
+.delete .confirmation {
+    margin: 5% auto;
+    position: relative;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    width: 50vw;
+    min-width: 280px;
+    max-height: 50vh;
+    overflow: hidden;
+    /*transition: all 5s ease-in-out;*/
+}
+
+.delete .confirmation .headline{
+    font-size: 20px;
+    color: #003A61;
+}
+
+.delete .confirmation .close {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    font-size: 20px;
+}
+
+.delete .confirmation .close:after{
+    content: "\f00d";
+    font-family: FontAwesome;
+}
+
+.delete .confirmation .close:hover {
+    color: #003A61;
+}
+
+.delete .confirmation .inner .message{
+    max-height: 30vh;
+    overflow: auto;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+/*delete message END*/
 
 /*HOMEPAGE/STARTPAGE END*/
 

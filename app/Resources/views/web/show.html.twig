@@ -2,14 +2,39 @@
 
 
 {% block body %}
-    {{ dump(webs) }}
+   <!-- {{ dump(webs) }} -->
     <div class="row">
         {% for web in webs %}
             <div class="accordion">
                 <input id="{{ web.name }}" type="checkbox">
-                <label for="{{ web.name }}">{{ web.name }} | {{ web.domain }}</label>
+                <label for="{{ web.name }}"><span class="name">{{ web.name }}</span> | <span class="domain">{{ web.domain }}</span></label>
                 <div class="expand">
-                    <a href="{{ path('delete_web', {'id': web.id }) }}" class="btn btn-danger">Delete</a>
+                    <div class="webButtons">
+                        <a href="#del-{{ web.name }}" class="btn btn-danger">Delete</a>
+                    </div>
+                    <div class="bundles">
+                        <a href="#" class="bundleLinks">other links</a>
+                        <a href="#" class="bundleLinks">other links</a>
+                        <a href="#" class="bundleLinks">other links</a>
+                        <a href="#" class="bundleLinks">other links</a>
+                        <a href="#" class="bundleLinks">other links</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="del-{{ web.name }}" class="delete">
+                <div class="confirmation">
+                    <div class="headline">Delete Web: {{ web.name }}? </div>
+                    <a class="close" href="#"></a>
+                    <div class="inner">
+                        <div class="message">
+                            Do you really want to delete this web? The action can not be reversed!
+                        </div>
+                        <div class="message-links">
+                            <a href="{{ path('delete_web', {'id': web.id }) }}" class="btn btn-danger deletebutton">Delete</a>
+                            <a href="#" class="deletecancelbutton btn btn-default">Cancel</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}

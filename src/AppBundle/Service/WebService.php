@@ -33,7 +33,7 @@ class WebService
      */
     public function getWebs(){
         $webs = $this->em->getRepository('AppBundle:Web')
-            ->findAll();
+            ->findAllWebsInOrder();
         return $webs;
     }
 }

@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Web;
 use AppBundle\Form\WebFormType;
+use AppBundle\Service\WebService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,10 +25,10 @@ class WebController extends Controller
      */
     public function showMainPageAction()
     {
-        $webs = $this->get('AppBundle\Service\WebService')->getWebs();
+        $webs = $this->get('AppBundle\Service\WebService')->getWebs();  //new way, autowireing guess the right constructor of WebService, so in service.yml it must no longer be included
+       /* $webService = new WebService($this->getDoctrine()->getManager());
+        $webs = $webService->getWebs();*/
         return $this->render('web/show.html.twig', [
-            'testVariable' => 'hallo',
-            'page' => 'start',
             'webs' => $webs
         ]);
     }
