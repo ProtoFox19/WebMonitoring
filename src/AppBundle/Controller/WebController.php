@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Web;
+use AppBundle\Form\EditWebFormType;
 use AppBundle\Form\WebFormType;
 use AppBundle\Service\WebService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -36,7 +37,7 @@ class WebController extends Controller
 
 
     /**
-     * @Route("/new", name="newWeb")
+     * @Route("/new", name="new_web")
      */
     public function newWebAction(Request $request)
     {
@@ -59,6 +60,32 @@ class WebController extends Controller
         ]);
     }
 
+
+    /**
+     * @Route("/{id}/edit", name="edit_web")
+     */
+    public function editWebAction(Request $request, Web $web)
+    {
+        $form = $this->createForm(EditWebFormType::class, $web);
+
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $web = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($web);
+            $em->flush();
+
+            $this->addFlash('success', 'Web is updated correctly.');
+
+            return $this->redirectToRoute('homepage');
+        }
+
+        return $this->render('web/edit.html.twig', [
+            'editWebForm' => $form->createView()
+        ]);
+    }
+
+
     /**
      * @Route("/{id}/delete", requirements={"id" = "\d+"}, name="delete_web")
      */
@@ -74,6 +101,8 @@ class WebController extends Controller
 
         $em->remove($web);
         $em->flush();
+
+        $this->addFlash('success', 'Web was deleted.');
 
         return $this->redirectToRoute('homepage');
     }

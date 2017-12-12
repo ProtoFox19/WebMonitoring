@@ -3,20 +3,17 @@
 namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WebFormType extends AbstractType
+class EditWebFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             -> add('name')
             -> add('domain')
-            -> add('active', CheckboxType::class, [
-                'data' => true
-            ]);
+            -> add('active');
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -28,6 +25,6 @@ class WebFormType extends AbstractType
 
     public function getBlockPrefix()
     {
-        return 'app_bundle_web_form_type';
+        return 'app_bundle_edit_web_form_type';
     }
 }

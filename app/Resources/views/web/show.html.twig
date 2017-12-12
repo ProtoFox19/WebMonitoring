@@ -4,13 +4,19 @@
 {% block body %}
    <!-- {{ dump(webs) }} -->
     <div class="row">
+        <div class="webNavi">
+            <a href="{{ path('new_web') }}" class="btn btn-default createNewWebButton">Create new Web</a>
+        </div>
+    </div>
+    <div class="row">
         {% for web in webs %}
             <div class="accordion">
                 <input id="{{ web.name }}" type="checkbox">
-                <label for="{{ web.name }}"><span class="name">{{ web.name }}</span> | <span class="domain">{{ web.domain }}</span></label>
+                <label {% if not web.active %}class="inactive"{% endif %} for="{{ web.name }}"><span class="name">{{ web.name }}</span> | <span class="domain">{{ web.domain }}</span></label>
                 <div class="expand">
                     <div class="webButtons">
                         <a href="#del-{{ web.name }}" class="btn btn-danger">Delete</a>
+                        <a href="{{ path('edit_web', {'id': web.id }) }}" class="btn btn-default">Edit</a>
                     </div>
                     <div class="bundles">
                         <a href="#" class="bundleLinks">other links</a>

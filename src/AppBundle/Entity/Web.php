@@ -37,6 +37,11 @@ class Web
     private $domain;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active = true;
+
+    /**
      * @return integer
      */
     public function getId()
@@ -74,6 +79,22 @@ class Web
     public function setDomain($domain)
     {
         $this->domain = $domain;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param mixed $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 
 

@@ -34,6 +34,7 @@ a:hover, a:focus{
 .btn-primary {
     background-color: #003A61;
     border-color: #003A61;
+    box-shadow: none !important;
 }
 
 .btn-primary:hover {
@@ -49,6 +50,7 @@ a:hover, a:focus{
 
 .btn.btn-danger{
     color: #fff;
+    box-shadow: none !important;
 }
 
 .btn.btn-danger:hover{
@@ -58,6 +60,7 @@ a:hover, a:focus{
 .btn.btn-default{
     background-color: #003A61;
     color: #fff;
+    box-shadow: none !important;
 }
 
 .btn.btn-default:hover{
@@ -276,7 +279,6 @@ nav.headerNavigation{
         opacity 0.55s ease;
     }
 
-
     #menuToggle .burger:first-child {
         transform-origin: 0% 0%;
     }
@@ -284,7 +286,6 @@ nav.headerNavigation{
     #menuToggle .burger:nth-last-child(2) {
         transform-origin: 0% 100%;
     }
-
 
     #menuToggle input.burgermenu:checked ~ .burger {
         opacity: 1;
@@ -355,6 +356,15 @@ nav.headerNavigation{
 /*HEADER END*/
 
 /*HOMEPAGE/STARTPAGE*/
+.webNavi{
+    width: 100%;
+    margin: 5px 15px 5px 15px;
+}
+
+.webNavi .createNewWebButton{
+    float: right;
+}
+
 .accordion {
     position: relative;
     margin: 5px 15px 5px 15px;
@@ -379,6 +389,10 @@ nav.headerNavigation{
     align-items: center;
 }
 
+.accordion label.inactive{
+    color:rgba(0, 0, 0, 0.5);
+}
+
 .accordion label span.name{
     width: 30%;
     min-width: 125px;
@@ -398,13 +412,14 @@ nav.headerNavigation{
     max-height: 0;
     overflow: hidden;
     background: #fff;
-    -webkit-transition: max-height .35s;
-    -o-transition: max-height .35s;
-    transition: max-height .35s;
+    -webkit-transition: max-height .25s;
+    -o-transition: max-height .25s;
+    transition: max-height .25s;
 }
 
 .accordion input:checked ~ .expand {
     max-height: 10em;
+    min-height: 61px;
     overflow: auto;
 }
 
@@ -425,6 +440,16 @@ nav.headerNavigation{
     font-size: 16px;
     padding: 2px;
     line-height: 1;
+    margin: 2px;
+}
+
+.expand .webButtons .btn.btn-default{
+    height: 22px;
+    width: 60px;
+    font-size: 16px;
+    padding: 2px;
+    line-height: 1;
+    margin: 2px;
 }
 
 .expand .bundles{
