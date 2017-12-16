@@ -1,26 +1,34 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}WebMonitoring - New Web | Parrot Media{% endblock %}
+
 {% block body %}
-    <div class="row">
-        <div class="newWeb col-md-6 col-sm-8 col-12">
-            <h1>new Web</h1>
-            {{ form_start(webForm) }}
-                {{ form_row(webForm.name,{
-                    'label_attr': {'class': 'newFormLabel'}
+<h1>new Web</h1>
+{{ form_start(webForm) }}
+    <div class="form">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                {{ form_widget(webForm.name,{
+                    'label_attr': {'class': 'newFormLabel'},
+                    'label' : false,
+                    'attr': {'class': 'form-control', 'placeholder': 'Name'}
                 }) }}
-
-                {{ form_row(webForm.domain,{
-                    'label_attr': {'class': 'newFormLabel'}
-                }) }}
-
-                {{ form_row(webForm.active,{
-                    'label_attr': {'class': 'newFormLabel'}
-                }) }}
-
-               {# {{ form_widget(webForm) }}#}
-            <button type="submit" class="btn btn-primary">Save</button>
-            {{ form_end(webForm) }}
         </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+                {{ form_widget(webForm.domain,{
+                    'label_attr': {'class': 'newFormLabel'},
+                    'label' : false,
+                    'attr': {'class': 'form-control', 'placeholder': 'Domain'}
+                }) }}
+        </div>
+            {{ form_row(webForm.active,{
+                'label_attr': {'class': 'newFormLabel'}
+            }) }}
+
+           {# {{ form_widget(webForm) }}#}
+            <button type="submit" class="btn btn-primary">Save</button>
     </div>
+    {{ form_end(webForm) }}
 
 {% endblock %}

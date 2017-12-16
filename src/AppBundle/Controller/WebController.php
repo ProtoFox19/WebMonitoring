@@ -26,7 +26,7 @@ class WebController extends Controller
      */
     public function showMainPageAction()
     {
-        $webs = $this->get('AppBundle\Service\WebService')->getWebs();  //new way, autowireing guess the right constructor of WebService, so in service.yml it must no longer be included
+        $webs = $this->get(WebService::class)->getWebs();  //new way, autowireing guess the right constructor of WebService, so in service.yml it must no longer be included  || also correct: 'AppBundle\Service\WebService'
        /* $webService = new WebService($this->getDoctrine()->getManager());
         $webs = $webService->getWebs();*/
         return $this->render('web/show.html.twig', [

@@ -1,26 +1,32 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="row">
-        <div class="newWeb col-md-6 col-sm-8 col-12">
-            <h1>Edit Web</h1>
-            {{ form_start(editWebForm) }}
-            {{ form_row(editWebForm.name,{
-                'label_attr': {'class': 'newFormLabel'}
+    <h1>Edit Web</h1>
+    {{ form_start(editWebForm) }}
+    <div class="form">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+            {{ form_widget(editWebForm.name,{
+                'label_attr': {'class': 'newFormLabel'},
+                'label' : false,
+                'attr': {'class': 'form-control', 'placeholder': 'Name'}
             }) }}
-
-            {{ form_row(editWebForm.domain,{
-                'label_attr': {'class': 'newFormLabel'}
-            }) }}
-
-            {{ form_row(editWebForm.active,{
-                'label_attr': {'class': 'newFormLabel'}
-            }) }}
-
-            {# {{ form_widget(editWebForm) }}#}
-            <button type="submit" class="btn btn-primary">Save</button>
-            {{ form_end(editWebForm) }}
         </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
+            {{ form_widget(editWebForm.domain,{
+                'label_attr': {'class': 'newFormLabel'},
+                'label' : false,
+                'attr': {'class': 'form-control', 'placeholder': 'Domain'}
+            }) }}
+        </div>
+        {{ form_row(editWebForm.active,{
+            'label_attr': {'class': 'newFormLabel'}
+        }) }}
+
+        <button type="submit" class="btn btn-primary">Save</button>
     </div>
+    {{ form_end(editWebForm) }}
+
 
 {% endblock %}

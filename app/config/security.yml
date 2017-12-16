@@ -33,6 +33,7 @@ security:
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register/confirmed, role: ROLE_USER }
         - { path: ^/register, role: ROLE_ADMIN }
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/profile/edit, role: ROLE_ADMIN }

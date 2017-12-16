@@ -15,7 +15,8 @@ class WebFormType extends AbstractType
             -> add('name')
             -> add('domain')
             -> add('active', CheckboxType::class, [
-                'data' => true
+                'data' => true,
+                'required' => false
             ]);
     }
 
