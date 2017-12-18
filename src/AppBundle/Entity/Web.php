@@ -9,11 +9,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="AppBundle\Repository\WebRepository")
  * @ORM\Table(name="webs")
+ * @UniqueEntity(fields={"name"}, message="The Name is already registered")
+ * @UniqueEntity(fields={"domain"}, message="The Domain is already registered")
  */
 class Web
 {
@@ -25,14 +28,14 @@ class Web
     private $id;
 
     /**
-     * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank()
+     * @ORM\Column(type="string", unique=true)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="string", unique=true)
      * @Assert\NotBlank()
+     * @ORM\Column(type="string", unique=true)
      */
     private $domain;
 

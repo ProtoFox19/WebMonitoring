@@ -3,24 +3,27 @@
 {% block title %}WebMonitoring - New Web | Parrot Media{% endblock %}
 
 {% block body %}
+
 <h1>new Web</h1>
 {{ form_start(webForm) }}
     <div class="form">
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
                 {{ form_widget(webForm.name,{
-                    'label_attr': {'class': 'newFormLabel'},
-                    'label' : false,
                     'attr': {'class': 'form-control', 'placeholder': 'Name'}
                 }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(webForm.name) }}
         </div>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
                 {{ form_widget(webForm.domain,{
-                    'label_attr': {'class': 'newFormLabel'},
-                    'label' : false,
                     'attr': {'class': 'form-control', 'placeholder': 'Domain'}
                 }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(webForm.domain) }}
         </div>
             {{ form_row(webForm.active,{
                 'label_attr': {'class': 'newFormLabel'}

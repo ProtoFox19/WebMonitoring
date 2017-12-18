@@ -7,18 +7,20 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
             {{ form_widget(editWebForm.name,{
-                'label_attr': {'class': 'newFormLabel'},
-                'label' : false,
                 'attr': {'class': 'form-control', 'placeholder': 'Name'}
             }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(editWebForm.name) }}
         </div>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-globe" aria-hidden="true"></i></span>
             {{ form_widget(editWebForm.domain,{
-                'label_attr': {'class': 'newFormLabel'},
-                'label' : false,
                 'attr': {'class': 'form-control', 'placeholder': 'Domain'}
             }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(editWebForm.domain) }}
         </div>
         {{ form_row(editWebForm.active,{
             'label_attr': {'class': 'newFormLabel'}

@@ -8,34 +8,38 @@
     <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-at" aria-hidden="true"></i></span>
             {{ form_widget(form.email,{
-                'label_attr': {'class': 'newFormLabel'},
-                'label' : false,
                 'attr': {'class': 'form-control', 'placeholder': 'E-Mail'}
             }) }}
+    </div>
+    <div class="formError">
+        {{ form_errors(form.email) }}
     </div>
     <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
             {{ form_widget(form.username,{
-                'label_attr': {'class': 'newFormLabel'},
-                'label' : false,
                 'attr': {'class': 'form-control', 'placeholder': 'Username'}
             }) }}
+    </div>
+    <div class="formError">
+        {{ form_errors(form.username) }}
     </div>
     <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
         {{ form_widget(form.plainPassword.first,{
-            'label_attr': {'class': 'newFormLabel'},
-            'label' : false,
             'attr': {'class': 'form-control', 'placeholder': 'Password'}
         }) }}
+    </div>
+    <div class="formError">
+        {{ form_errors(form.plainPassword.first) }}
     </div>
     <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-unlock-alt" aria-hidden="true"></i></span>
         {{ form_widget(form.plainPassword.second,{
-            'label_attr': {'class': 'newFormLabel'},
-            'label' : false,
             'attr': {'class': 'form-control', 'placeholder': 'Repeat Password'}
         }) }}
+    </div>
+    <div class="formError">
+        {{ form_errors(form.plainPassword.second) }}
     </div>
     <div>
         <input type="submit" class="btn btn-primary" value="{{ 'registration.submit'|trans }}" />
