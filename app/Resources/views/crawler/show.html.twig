@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WebMonitoring - Crawler Options | Parrot Media{% endblock %}
+
+{% block body %}
+    {{ dump(web) }}
+
+
+    <a href="{{ path('crawling', {'id': web.id }) }}" class="bundleLinks">Crawling</a>
+{% endblock %}
