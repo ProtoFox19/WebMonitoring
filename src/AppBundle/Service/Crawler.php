@@ -4,6 +4,8 @@
  * User: Christoph
  * Date: 23.12.2017
  * Time: 18:07
+ *
+ * Code Base: https://yabhq.com/build-web-crawler-10-minutes/
  */
 
 namespace AppBundle\Service;
