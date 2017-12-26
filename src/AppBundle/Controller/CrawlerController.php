@@ -36,11 +36,12 @@ class CrawlerController extends Controller
     public function crawlingAction(Web $web)
     {
 
-        //set_time_limit(0);
+        set_time_limit(0);
         $links =[];
         $crawler = $this->get(Crawler::class);
 
         $dom = $crawler->crawl($web->getDomain(), 10);
+        //TODO rausnehmen
         $test = $dom->testvariable;
         $i=0;
         foreach ($dom->links() as $link) {

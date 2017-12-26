@@ -5,12 +5,13 @@
  * Date: 23.12.2017
  * Time: 18:07
  *
- * Code Base: https://yabhq.com/build-web-crawler-10-minutes/
+ * Code Base: https://github.com/YABhq/Crawler-Tutorial/blob/master/src/crawler.php
  */
 
 namespace AppBundle\Service;
 
 use GuzzleHttp\Client;
+use http\Env\Url;
 use Symfony\Component\DomCrawler\Crawler as DomCrawler;
 
 
@@ -50,11 +51,18 @@ class Crawler
 
         try {
 
-            $baseUrl = str_replace(['http://', 'https://'], '', $this->baseUrl); //selbst hinzugefuegt
-            if(strpos($url,"/") === 0 && strpos($url, $baseUrl) === false){
-                $url = $this->baseUrl . $url;
+            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
+            if((strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0)&& strpos($url, $baseUrl) === false){
+                $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;
+                //$url = $this->baseUrl . $url;
             }
-            $this->testvariable[$this->j++] = $url;
+            if((strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0) && strpos($url, $baseUrl) === false){
+                $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $url : $this->baseUrl . "/" . $url;
+                //$url = $this->baseUrl . '/' . $url;
+            }
+            //TODO rausnehmen
+            //$this->testvariable[$this->j++] = $url;
+            //$this->testvariable[$this->j++] = $baseUrl;
 
             $this->links[$url] = [
                 'status_code' => 0,
@@ -133,13 +141,22 @@ class Crawler
 
     private function checkIfExternal($url)
     {
+        //TODO wieder rausnehmen
+        //$this->testvariable[$this->j++] = $url;
+
         $baseUrl = str_replace(['http://', 'https://'], '', $this->baseUrl);
         // if the url fits then keep going!
 
-        if(strpos($url,"/") === 0 || (strpos($url,"/") === 0 && strpos($url, $baseUrl) === true)){         //selbst hinzugefuegt
+        /*if(strpos($url,"/") === 0 || (strpos($url,"/") === 0 && strpos($url, $baseUrl) === true)){         //selbst hinzugefuegt
+            return false;
+        }*/
+        if(strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0){         //selbst hinzugefuegt
             return false;
         }
-        if (preg_match("@http(s)?\://$baseUrl@", $url)) {
+        if (preg_match("@http(s)?\://$baseUrl@", $url)) {       //https or http + baseUrl
+            return false;
+        }
+        if(strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0){
             return false;
         }
 
@@ -162,6 +179,9 @@ class Crawler
                 $currentLinks[$nodeUrl]['is_external'] = false;
                 $currentLinks[$nodeUrl]['url'] = $nodeUrl;
                 $currentLinks[$nodeUrl]['visited'] = false;
+
+                //TODO wieder rausnehmen
+                //$this->testvariable[$this->j++] = $nodeUrl;
 
                 // check if the link is external
                 if ($this->checkIfExternal($currentLinks[$nodeUrl]['url'])) {
