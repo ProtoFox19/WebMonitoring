@@ -29,7 +29,7 @@ class CrawlerController extends Controller
     }
 
     /**
-     * @Route("/{id}/crawling", name="crawling")
+     * @Route("/{id}/crawling_web", name="crawling_web")
      * @param Web $web
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -58,5 +58,16 @@ class CrawlerController extends Controller
             'links' => $links,
             'test' => $test
         ]);
+    }
+
+    /**
+     * @Route("/{id}/createSitemap", name="createSitemap")
+     */
+    public function createSitemapAction(){
+
+
+        $this->addFlash('success', 'The Sitemap will be generated. It may take some time.');
+
+        return $this->redirectToRoute('homepage');
     }
 }
