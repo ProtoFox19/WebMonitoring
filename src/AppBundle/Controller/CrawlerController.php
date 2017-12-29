@@ -9,10 +9,17 @@
 namespace AppBundle\Controller;
 
 
+use AppBundle\Command\CreateSitemapCommand;
 use AppBundle\Entity\Web;
 use AppBundle\Service\Crawler;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class CrawlerController extends Controller
 {
@@ -63,10 +70,51 @@ class CrawlerController extends Controller
     /**
      * @Route("/{id}/createSitemap", name="createSitemap")
      */
-    public function createSitemapAction(){
+    public function createSitemapAction(Web $web, KernelInterface $kernel){
+        $test='';
+        $testzwei ='';
+        $content ='';
+
+      /*  $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput(array(
+            'command' => 'app:create-Sitemap',
+            // (optional) define the value of command arguments
+            'domain_name' => 'testing',
+        ));
+
+        // You can use NullOutput() if you don't need the output
+        $output = new NullOutput();
+        //$output = new BufferedOutput();
+        $application->run($input, $output);
+
+        // return the output, don't use if you used NullOutput()
+        //$content = $output->fetch();
+
+        // return new Response(""), if you used NullOutput()
+        //return new Response("");
+        */
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            //chdir('C:\xampp\htdocs\Symfony\WebMonitoring');
+            //$test = getcwd();
+            $test = $this->get('kernel')->getRootDir().'/console '.(new CreateSitemapCommand())->getName().' '. $web->getDomain() ." > NUL";
+            $testzwei = system('php '. $this->get('kernel')->getRootDir().'/console '.(new CreateSitemapCommand())->getName().' '. $web->getDomain() ." > NUL");
+        }else{
+            shell_exec(""."\htdocs\Symfony\WebMonitoring\src\AppBundle\Service\SitemapGenerator.php"." >/dev/null 2>&1 &");
+        }
 
 
-        $this->addFlash('success', 'The Sitemap will be generated. It may take some time.');
+      /*  if (substr(php_uname(), 0, 7) == "Windows"){
+            chdir('C:\xampp\htdocs\Symfony\WebMonitoring');
+            $test = getcwd();
+            pclose(popen("start /B" . "php" . " " . escapeshellarg("bin/console app:create-Sitemap test"), "r"));
+        } else {
+            exec("./" . "php" . " " . escapeshellarg("C:\xampp\htdocs\Symfony\WebMonitoring\src\AppBundle\Service\GenerateSitemap.php") . " > /dev/null &");
+        }*/
+
+        $this->addFlash('success', 'The Sitemap will be generated. It may take some time.' . $test);
 
         return $this->redirectToRoute('homepage');
     }
