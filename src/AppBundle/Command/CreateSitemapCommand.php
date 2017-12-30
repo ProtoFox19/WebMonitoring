@@ -42,10 +42,10 @@ class CreateSitemapCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $i = 0;
-        while($i <100000){
+        while($i <5){
             $i++;
         }
         $domain = $input->getArgument('domain_name');
-        mkdir('./test1/test2/'.$domain, 0777, true);
+        mkdir('./test4/test7/'.$domain, 0777, true);
     }
 }
