@@ -9,12 +9,14 @@
 namespace AppBundle\Command;
 
 
+use AppBundle\Service\Crawler;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateSitemapCommand extends Command
+class CreateSitemapCommand extends ContainerAwareCommand
 {
 
     protected function configure()
@@ -24,16 +26,16 @@ class CreateSitemapCommand extends Command
             ->setName('app:create-Sitemap')
 
             // the short description shown while running "php bin/console list"
-            ->setDescription('Creates a new Sitemap.')
+            ->setDescription('Creates a new Sitemap.xml of one or all active Webs.')
 
             // the full command description shown when running the command with
             // the "--help" option
-            ->setHelp('This command allows you to create a Sitemap...')
+            ->setHelp('This command allows you to create a Sitemap.xml of one or all active Webs. If you want to create a Sitemap for one Web, add the Domain or Name as an Argument')
 
             ->addArgument(
                 'domain_name',
                 InputArgument::OPTIONAL,
-                'for wich Site do you want to create a Sitemap? If no Value given, than it will create a Sitemap for all "active" websites'
+                'For which Site do you want to create a Sitemap.xml? If no Value given, it will create a Sitemap for all "active" websites (Valid Arguments: Name and Domain of the Web)'
             )
             ->setHidden(true);
         ;
@@ -43,6 +45,18 @@ class CreateSitemapCommand extends Command
     {
 
         $domain = $input->getArgument('domain_name');
-        mkdir('./test4/test7/'.$domain, 0777, true);
+        //mkdir('./test4/test7/'.$domain, 0777, true);
+        $crawler = $this->getContainer()->get(Crawler::class);
+
+        $dom = $crawler->crawl($domain, 10);
+        $i=0;
+        foreach ($dom->links() as $link) {
+            if ($link['visited']) {
+                $output->writeln('' . $link['url'] . '');
+                $i++;
+            }
+        }
+
+        //$output->writeln($dom->links());
     }
 }

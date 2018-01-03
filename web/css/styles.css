@@ -7,6 +7,8 @@ Mediaquery´s are allways on the end of a Sitesection, except the "LOGIN" Sectio
 */
 body{
     font-family: 'Source Sans Pro',Helvetica,Arial,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 }
 
 a, a:visited {
@@ -451,6 +453,7 @@ nav.headerNavigation{
     max-height: 10em;
     min-height: 61px;
     overflow: auto;
+    padding: 5px;
 }
 
 .expand .webButtons{
@@ -482,15 +485,27 @@ nav.headerNavigation{
     margin: 2px;
 }
 
-.expand .bundles{
+.expand .functions{
     min-height: 40px;
     width: 65%;
 }
 
-.expand .bundles .bundleLinks{
+.expand .functions .functionLink{
     display: block;
     float: left;
-    width: 100px;
+    padding: 5px;
+    position: relative;
+}
+
+.expand .functions .functionLink:first-child{
+    padding-left: 0;
+}
+
+.expand .functions .functionLink + .functionLink:before{
+    content: '|';
+    margin-left: -6px;
+    padding-right: 5px;
+    color: #212529;
 }
 
 .accordion label::after {
@@ -584,6 +599,18 @@ nav.headerNavigation{
 
     .webNavi .input-group.search {
         width: 100%;
+    }
+
+    .expand .functions .functionLink{
+        float: none;
+        display: block;
+        padding: 4px 0 0;
+    }
+
+    .expand .functions .functionLink + .functionLink:before{
+        content: '';
+        margin-left: 0px;
+        padding-right: 0px;
     }
 }
 /*HOMEPAGE/STARTPAGE END*/
