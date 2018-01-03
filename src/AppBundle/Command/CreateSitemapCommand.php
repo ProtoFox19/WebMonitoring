@@ -32,8 +32,8 @@ class CreateSitemapCommand extends Command
 
             ->addArgument(
                 'domain_name',
-                InputArgument::REQUIRED,
-                'for wich Site do you want to create a Sitemap'
+                InputArgument::OPTIONAL,
+                'for wich Site do you want to create a Sitemap? If no Value given, than it will create a Sitemap for all "active" websites'
             )
             ->setHidden(true);
         ;
@@ -41,10 +41,7 @@ class CreateSitemapCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $i = 0;
-        while($i <5){
-            $i++;
-        }
+
         $domain = $input->getArgument('domain_name');
         mkdir('./test4/test7/'.$domain, 0777, true);
     }

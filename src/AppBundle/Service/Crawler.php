@@ -6,6 +6,7 @@
  * Time: 18:07
  *
  * Code Base: https://github.com/YABhq/Crawler-Tutorial/blob/master/src/crawler.php
+ * modified by Christoph Suhr ("OWN" in Comments)
  */
 
 namespace AppBundle\Service;
@@ -20,9 +21,12 @@ class Crawler
     protected $url;
     protected $links;
     protected $maxDepth;
+    private $prereserveLinks = [];
 
     public $testvariable = [];
+    public $testvariablezwei = [];
     public $j = 0;
+    public $k = 0;
 
     public function __construct()
     {
@@ -51,18 +55,19 @@ class Crawler
 
         try {
 
-            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
+            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //OWN Begin: the following if´s consider all types of url´s
             if((strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0)&& strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;
-                //$url = $this->baseUrl . $url;
+                //$url = $baseUrl . $url;
             }
             if((strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0) && strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $url : $this->baseUrl . "/" . $url;
-                //$url = $this->baseUrl . '/' . $url;
-            }
+                //$url = $baseUrl . '/' . $url;
+            }//OWN End
             //TODO rausnehmen
-            //$this->testvariable[$this->j++] = $url;
+            $this->testvariablezwei[$this->k++] = $url . "  " . $maxDepth;
             //$this->testvariable[$this->j++] = $baseUrl;
+            //$this->testvariable[$this->j++] = $url ."  ". microtime(true);
 
             $this->links[$url] = [
                 'status_code' => 0,
@@ -84,6 +89,8 @@ class Crawler
             // lets also get the status code
             $statusCode = $crawler->getStatusCode();
 
+            // mark current url as visited
+            $this->links[$url]['visited'] = true;
             // Set the status code
             $this->links[$url]['status_code'] = $statusCode;
             if ($statusCode == 200) {
@@ -98,8 +105,10 @@ class Crawler
                         $pageLinks = $this->extractLinks($html, $url);
                     }
 
-                    // mark current url as visited
-                    $this->links[$url]['visited'] = true;
+                    //TODO rausnehmen
+                    //$this->testvariable[$this->j++] = $pageLinks;
+                    //$this->testvariablezwei[$this->k++] = $maxDepth;
+
                     // spawn spiders for the child links, marking the depth as decreasing, or send out the soldiers
                     $this->spawn($pageLinks, $maxDepth - 1);
                 }
@@ -126,11 +135,14 @@ class Crawler
             // only pay attention to those we do not know
             if (! isset($this->links[$url])) {
                 $this->links[$url] = $info;
+
                 // we really only care about links which belong to this domain
                 if (! empty($url) && ! $this->links[$url]['visited'] && ! $this->links[$url]['is_external']) {
                     // restart the process by sending out more soldiers!
                     //TODO wieder rausnehmen
                     //$this->testvariable[$this->j++] = $this->links[$url]['url'];
+                    //$this->testvariablezwei[$this->k++] = $maxDepth;
+
                     $this->spider($this->links[$url]['url'], $maxDepth);
                 }
             }
@@ -150,13 +162,13 @@ class Crawler
         /*if(strpos($url,"/") === 0 || (strpos($url,"/") === 0 && strpos($url, $baseUrl) === true)){         //selbst hinzugefuegt
             return false;
         }*/
-        if(strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0){         //selbst hinzugefuegt
+        if(strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0){         //OWN
             return false;
         }
         if (preg_match("@http(s)?\://$baseUrl@", $url)) {       //https or http + baseUrl
             return false;
         }
-        if(strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0){
+        if(strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0){     //OWN
             return false;
         }
 
@@ -165,6 +177,7 @@ class Crawler
 
     private function extractLinks($html, $url)
     {
+
         $dom = new DomCrawler($html);
         $currentLinks = [];
 
@@ -173,15 +186,32 @@ class Crawler
             // get the href
             $nodeUrl = $node->attr('href');
 
+            $fullUrl ='';   //OWN Begin: because the $nodeUrl could have just a part url, the full url must be build
+            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
+            if((strpos($nodeUrl,"/") === 0 || strpos($nodeUrl,"./") === 0 || strpos($nodeUrl,"../") === 0)&& strpos($nodeUrl, $baseUrl) === false){
+                $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $nodeUrl : $this->baseUrl . $nodeUrl;
+            }
+            if((strpos($nodeUrl,"http://") !== 0 && strpos($nodeUrl,"https://") !== 0 && strpos($nodeUrl,"www") !== 0 && strpos($nodeUrl,"/") !== 0 && strpos($nodeUrl,"./") !== 0 && strpos($nodeUrl,"../") !== 0) && strpos($nodeUrl, $baseUrl) === false){
+                $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $nodeUrl : $this->baseUrl . "/" . $nodeUrl;
+            }
+            if($fullUrl ==='') $fullUrl = $nodeUrl; //OWN End
+            //TODO wieder rausnehmen
+            //$this->testvariable[$this->j++] = $fullUrl ."  ". microtime(true);
+            /*if (isset($this->links[$fullUrl])) {
+                $this->testvariable[$this->j++] = $this->links[$fullUrl];
+            }*/
+
             // If we don't have it lets collect it
-            if (! isset($this->links[$nodeUrl])) {
+            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl])) {  //OWN: there must be a temporal reserving variable for the NodeURL, because of Asynchronous searching of the spiders
+                $this->prereserveLinks[$nodeUrl] = $nodeUrl;    //OWN: set the temporal reserving
                 // set the basics
                 $currentLinks[$nodeUrl]['is_external'] = false;
                 $currentLinks[$nodeUrl]['url'] = $nodeUrl;
                 $currentLinks[$nodeUrl]['visited'] = false;
 
                 //TODO wieder rausnehmen
-                //$this->testvariable[$this->j++] = $nodeUrl;
+                //$this->testvariablezwei[$this->k++] = $nodeUrl ."  ". microtime(true);
+
 
                 // check if the link is external
                 if ($this->checkIfExternal($currentLinks[$nodeUrl]['url'])) {
@@ -195,6 +225,7 @@ class Crawler
             // let's avoid endless cycles
             $currentLinks[$url]['visited'] = true;
         }
+
 
         // Send back the reports
         return $currentLinks;

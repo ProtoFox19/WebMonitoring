@@ -3,9 +3,11 @@
 {% block title %}WebMonitoring - Crawler Options | Parrot Media{% endblock %}
 
 {% block body %}
-    {{ dump(web) }}
+    <!--{{ dump(web) }}-->
+    <h1>Sitemap Options - {{ web.name }} | {{ web.domain }}</h1>
 
 
+    <div class="alert alert-danger">The following links are for testing!</div>
     <a href="{{ path('crawling_web', {'id': web.id }) }}" class="bundleLinks">Crawling (web)</a>
     <a href="{{ path('create_sitemap', {'id': web.id }) }}" class="bundleLinks">Create Sitemap (asynchrone)</a>
 {% endblock %}

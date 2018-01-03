@@ -17,11 +17,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class CrawlerController extends Controller
 {
     /**
-     * @Route("/{id}/crawler_options", name="crawler_options")
+     * @Route("/{id}/sitemap_options", name="sitemap_options")
      * @param Web $web
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showCrawlingOption(Web $web){
+    public function showSitemapOption(Web $web){
         return $this->render('crawler/show.html.twig', [
             'web' => $web,
         ]);
@@ -42,6 +42,7 @@ class CrawlerController extends Controller
         $dom = $crawler->crawl($web->getDomain(), 10);
         //TODO rausnehmen
         $test = $dom->testvariable;
+        $testzwei = $dom->testvariablezwei;
         $i=0;
         foreach ($dom->links() as $link) {
             /*$links[$i] = ''.$link['url'].'';
@@ -55,7 +56,8 @@ class CrawlerController extends Controller
         return $this->render('crawler/show_crawling.html.twig', [
             'web' => $web,
             'links' => $links,
-            'test' => $test
+            'test' => $test,
+            'testzwei' => $testzwei
         ]);
     }
 
