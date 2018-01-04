@@ -21,6 +21,7 @@ class GenerateSitemap
     }
 
     public function generateSitemap($links, $name){
+        sort($links);
         $this->links = $links;
         $this->name = $name;
 
@@ -35,7 +36,7 @@ class GenerateSitemap
     private function safeSitemap($xml, $number = NULL){
         $counter ='';
         if(isset($number)) $counter = $number;
-        $file = fopen('./'.$this->name.'/sitemap'.$counter.'.xml','w+');
+        $file = fopen('./sitemaps/'.$this->name.'/sitemap'.$counter.'.xml','w+');
         fwrite($file,$xml);
         fclose($file);
     }
@@ -60,11 +61,11 @@ class GenerateSitemap
 
     private function createMasterSitemap($numberOfSitemaps){
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        $xml.= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'."\n";
+        $xml.= '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
         for($i=0; $i < $numberOfSitemaps; $i++){
-            $xml.= '<sitemap>'."\n";
-            $xml.= "\t" .'<loc>'. 'sitemap'. ($i+1) .'.xml'. '</loc>'."\n";
-            $xml.= '</sitemap>'."\n";
+            $xml.= "\t" .'<sitemap>'."\n";
+            $xml.= "\t" ."\t" .'<loc>'. 'sitemap'. ($i+1) .'.xml'. '</loc>'."\n";
+            $xml.= "\t" .'</sitemap>'."\n";
         }
         $xml.= '</sitemapindex>';
 
@@ -73,12 +74,12 @@ class GenerateSitemap
 
     private function getSitemap($links){
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
-        $xml.= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"'."\n";
+        $xml.= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         foreach ($links as $link) {
-            $xml.= '<url>'."\n";
-            $xml.= "\t" .'<loc>'. $link['url'] .'</loc>'. "\n";
-            $xml.= '</url>'."\n";
+            $xml.= "\t" .'<url>'."\n";
+            $xml.= "\t" ."\t" .'<loc>'. $link['url'] .'</loc>'. "\n";
+            $xml.= "\t" .'</url>'."\n";
         }
 
         $xml.= '</urlset>';

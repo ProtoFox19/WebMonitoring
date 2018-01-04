@@ -44,21 +44,27 @@ class CreateSitemapCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         $domain = $input->getArgument('domain_name');
-        //mkdir('./test4/test7/'.$domain, 0777, true);
+        $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $domain);
+        $path = './sitemaps/'.$domainname.'/';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
         $crawler = $this->getContainer()->get(Crawler::class);
 
         $dom = $crawler->crawl($domain, 10);
-        /*$i=0;
+        $validLinks = [];
+        $i=0;
         foreach ($dom->links() as $link) {
             if ($link['visited']) {
-                $output->writeln('' . $link['url'] . '');
+                //$output->writeln('' . $link['url'] . '');
+                $validLinks[$i] = $link;
+                //$validLinks[$i] = '' . $link['url'] . '';
                 $i++;
             }
-        }*/
+        }
 
         $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
-        $sitemapGenerator->generateSitemap($dom->links(),$domain);
+        $sitemapGenerator->generateSitemap($validLinks,$domainname);
     }
 }
