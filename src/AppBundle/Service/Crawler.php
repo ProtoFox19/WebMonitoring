@@ -50,6 +50,10 @@ class Crawler
         return $this->links;
     }
 
+    public function setLinksBack(){
+        $this->links = array();
+    }
+
     private function spider($url, $maxDepth)
     {
 

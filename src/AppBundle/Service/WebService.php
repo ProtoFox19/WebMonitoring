@@ -38,4 +38,15 @@ class WebService
         return $webs;
     }
 
+    /**
+     * @param $name_domain
+     * @return Web
+     */
+    public function getWebByNameOrDomain($name_domain){
+        $web = $this->em->getRepository('AppBundle:Web')->findOneByName($name_domain);
+        if($web === NULL){
+            $web = $this->em->getRepository('AppBundle:Web')->findOneByDomain($name_domain);
+        }
+        return $web;
+    }
 }

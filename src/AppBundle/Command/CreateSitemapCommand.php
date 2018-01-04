@@ -11,6 +11,7 @@ namespace AppBundle\Command;
 
 use AppBundle\Service\Crawler;
 use AppBundle\Service\GenerateSitemap;
+use AppBundle\Service\WebService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -45,26 +46,59 @@ class CreateSitemapCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $domain = $input->getArgument('domain_name');
-        $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $domain);
-        $path = './sitemaps/'.$domainname.'/';
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-        $crawler = $this->getContainer()->get(Crawler::class);
-
-        $dom = $crawler->crawl($domain, 10);
-        $validLinks = [];
-        $i=0;
-        foreach ($dom->links() as $link) {
-            if ($link['visited']) {
-                //$output->writeln('' . $link['url'] . '');
-                $validLinks[$i] = $link;
-                //$validLinks[$i] = '' . $link['url'] . '';
-                $i++;
+        $web = NULL;
+        if($domain!== NULL){
+            $web = $this->getContainer()->get(WebService::class)->getWebByNameOrDomain($domain);
+            if($web !== NULL){
+                $this->generateSitemap($web->getDomain());
+                //$output->writeln($web->getDomain());
+            }
+        } else{
+            $webs = $this->getContainer()->get(WebService::class)->getWebs();
+            foreach ($webs as $web){
+                if(!is_null($web->getSitemapSettings())){                               //Wenn Webs are not created with the Webinterface, they might not have SitemapSettings yet
+                    if($web->getActive() && $web->getSitemapSettings()->getActive()){
+                        $test = $this->generateSitemap($web->getDomain());
+                        foreach ($test as $link){
+                            $output->writeln($link['url']);
+                        }
+                        $output->writeln('------------------------------');
+                    }
+                }
             }
         }
 
-        $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
-        $sitemapGenerator->generateSitemap($validLinks,$domainname);
+
+    }
+
+    public function generateSitemap($domain){
+         $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $domain);
+         $path = './sitemaps/'.$domainname.'/';
+         if (!file_exists($path)) {
+             mkdir($path, 0777, true);
+         }
+         $crawler = $this->getContainer()->get(Crawler::class);
+
+         $dom = $crawler->crawl($domain, 10);
+         $validLinks = array();
+         $i=0;
+         foreach ($dom->links() as $link) {
+             if ($link['visited']) {
+                 $validLinks[$i] = $link;
+                 $i++;
+             }
+         }
+         $dom->setLinksBack();
+
+        //TODO for testing (sitemaps over 50000 links) - everything is alright
+        /*$validLinks = [];
+        for($i=0; $i < 112856; $i++){
+            $validLinks[$i]['url'] = 'nureintest.de'.$i;
+        }*/
+
+          $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
+          $sitemapGenerator->generateSitemap($validLinks,$domainname);
+
+          return $dom->links();
     }
 }

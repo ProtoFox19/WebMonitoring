@@ -17,7 +17,8 @@ class GenerateSitemap
 
     public function __construct()
     {
-
+        $this->links = $links = [];
+        $this->name = $name ='';
     }
 
     public function generateSitemap($links, $name){
