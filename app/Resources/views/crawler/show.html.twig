@@ -3,8 +3,37 @@
 {% block title %}WebMonitoring - Crawler Options | Parrot Media{% endblock %}
 
 {% block body %}
-    <!--{{ dump(web) }}-->
     <h1>Sitemap Options - {{ web.name }} | {{ web.domain }}</h1>
+    <!--{{ dump(test) }}-->
+    {{ form_start(editSitemapForm) }}
+    <div class="form">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-times" aria-hidden="true"></i></span>
+            {{ form_widget(editSitemapForm.notIncludedPath,{
+                'attr': {'class': 'form-control', 'placeholder': 'Not included Path (each Path belongs in a new Line)'}
+            }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(editSitemapForm.notIncludedPath) }}
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-sort-numeric-asc" aria-hidden="true"></i></span>
+            {{ form_widget(editSitemapForm.notablyPath,{
+                'attr': {'class': 'form-control', 'placeholder': 'Path|Priority|changefrquenzy'}
+            }) }}
+        </div>
+        <div class="formError">
+            {{ form_errors(editSitemapForm.notablyPath) }}
+        </div>
+        {{ form_row(editSitemapForm.active,{
+            'label_attr': {'class': 'newFormLabel'}
+        }) }}
+        <div class="alert alert-info">When the Sitemap Options aren't active, the sitemap.xml will not generate automatically!</div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+    {{ form_end(editSitemapForm) }}
+
 
 
     <div class="alert alert-danger">The following links are for testing!</div>

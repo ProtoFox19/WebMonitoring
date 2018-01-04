@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 
+use AppBundle\Entity\SitemapSettings;
 use AppBundle\Entity\Web;
 use Doctrine\ORM\EntityManager;
 
@@ -36,4 +37,5 @@ class WebService
             ->findAllWebsInOrder();
         return $webs;
     }
+
 }

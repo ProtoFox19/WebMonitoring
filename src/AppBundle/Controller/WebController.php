@@ -10,9 +10,11 @@ namespace AppBundle\Controller;
 
 
 
+use AppBundle\Entity\SitemapSettings;
 use AppBundle\Entity\Web;
 use AppBundle\Form\EditWebFormType;
 use AppBundle\Form\WebFormType;
+use AppBundle\Service\SitemapService;
 use AppBundle\Service\WebService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -46,8 +48,11 @@ class WebController extends Controller
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $web = $form->getData();
+            $newSitemapSetting = $this->get(SitemapService::class)->createDefaultSitemapSetting($web);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($web);
+            $em->persist($newSitemapSetting);
             $em->flush();
 
             $this->addFlash('success', 'Web is stored correctly.');

@@ -10,6 +10,7 @@ namespace AppBundle\Command;
 
 
 use AppBundle\Service\Crawler;
+use AppBundle\Service\GenerateSitemap;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,14 +50,15 @@ class CreateSitemapCommand extends ContainerAwareCommand
         $crawler = $this->getContainer()->get(Crawler::class);
 
         $dom = $crawler->crawl($domain, 10);
-        $i=0;
+        /*$i=0;
         foreach ($dom->links() as $link) {
             if ($link['visited']) {
                 $output->writeln('' . $link['url'] . '');
                 $i++;
             }
-        }
+        }*/
 
-        //$output->writeln($dom->links());
+        $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
+        $sitemapGenerator->generateSitemap($dom->links(),$domain);
     }
 }

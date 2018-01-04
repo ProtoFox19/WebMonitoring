@@ -27,6 +27,7 @@ h1,h2,h3,h4{
 
 h1{
     font-size: 22px;
+    padding-top: 5px;
 }
 
 .container{
@@ -86,13 +87,17 @@ h1{
     color: #003A61;
 }
 
-input.form-control{
+input.form-control, textarea.form-control{
     z-index: 0 !important;
     box-shadow: inset 0 0 0px 9999px white !important;
 }
 
-input.form-control:focus{
+input.form-control:focus, textarea.form-control:focus{
     border: 1px solid #F7A800 !important;
+}
+
+textarea{
+    min-height: 8em;
 }
 
 
@@ -615,17 +620,20 @@ nav.headerNavigation{
 }
 /*HOMEPAGE/STARTPAGE END*/
 
-/*NEW_USER/CHANGE_PASSWORD/NEW_WEB*/
+/*FORMS BEGIN*/
 .form{
     width: 60%;
     margin: 10px auto;
+}
+
+.newFormLabel{
+    padding-right: 5px;
 }
 
 @media (max-width: 767px) {
     .form{
         width: 100%;
     }
-
 }
 
-/*NEW_USER/CHANGE_PASSWORD/NEW_WEB END*/
+/*FORMS END*/
