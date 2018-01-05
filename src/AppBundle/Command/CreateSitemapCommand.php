@@ -45,6 +45,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        ini_set('memory_limit', 277872640);
         $domain = $input->getArgument('domain_name');
         $web = NULL;
         if($domain!== NULL){
@@ -59,10 +60,10 @@ class CreateSitemapCommand extends ContainerAwareCommand
                 if(!is_null($web->getSitemapSettings())){                               //Wenn Webs are not created with the Webinterface, they might not have SitemapSettings yet
                     if($web->getActive() && $web->getSitemapSettings()->getActive()){
                         $test = $this->generateSitemap($web->getDomain());
-                        foreach ($test as $link){
+                        /*foreach ($test as $link){
                             $output->writeln($link['url']);
                         }
-                        $output->writeln('------------------------------');
+                        $output->writeln('------------------------------');*/
                     }
                 }
             }
@@ -72,7 +73,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
     }
 
     public function generateSitemap($domain){
-         $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $domain);
+         $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.', '.eu'], '', $domain);
          $path = './sitemaps/'.$domainname.'/';
          if (!file_exists($path)) {
              mkdir($path, 0777, true);

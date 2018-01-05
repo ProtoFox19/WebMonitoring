@@ -52,6 +52,7 @@ class Crawler
 
     public function setLinksBack(){
         $this->links = array();
+        $this->prereserveLinks = array();
     }
 
     private function spider($url, $maxDepth)

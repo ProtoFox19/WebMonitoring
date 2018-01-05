@@ -56,7 +56,7 @@ class GenerateSitemap
             $this->safeSitemap($xml, $numberOfSitemaps+1);
         }
 
-        $xml = $this->createMasterSitemap($numberOfSitemaps+1);
+        $xml = $this->createMasterSitemap($numberOfSitemaps);
         $this->safeSitemap($xml);
     }
 
