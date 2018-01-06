@@ -21,9 +21,10 @@ class Crawler
     protected $url;
     protected $links;
     protected $maxDepth;
-    private $prereserveLinks = [];
-    private $excludedLinks =[];
-    private $webService;
+
+    private $prereserveLinks = [];  //Own
+    private $excludedLinks =[];     //Own
+    private $webService;            //Own
 
     public $testvariable = [];
     public $testvariablezwei = [];
@@ -36,7 +37,7 @@ class Crawler
         $this->links = [];
         $this->depth = 0;
 
-        $this->webService = $webService;
+        $this->webService = $webService;    //Own
     }
 
     public function crawl($url, $maxDepth = 10)
@@ -78,7 +79,7 @@ class Crawler
                 //$url = $baseUrl . '/' . $url;
             }//OWN End
             //TODO rausnehmen
-            $this->testvariablezwei[$this->k++] = $url . "  " . $maxDepth;
+            //$this->testvariablezwei[$this->k++] = $url . "  " . $maxDepth;
             //$this->testvariable[$this->j++] = $baseUrl;
             //$this->testvariable[$this->j++] = $url ."  ". microtime(true);
 
@@ -217,11 +218,21 @@ class Crawler
             $exclude = false;                                       //OWN Begin
             foreach ($this->excludedLinks as $excludedLink){
                 if(!empty($excludedLink)){
-                    if (substr($excludedLink, -1) == '/') {
+                    if (substr($excludedLink, -1) == '*') {
                         $excludedLink = substr($excludedLink, 0, -1);
-                    }
-                    if(strpos($nodeUrl,$excludedLink) !== false){           //if the excludedLink is in the nodeUrl, set exclude true, so the site with the excluded link don't get crawled. NOTE: excludedLink must be a Path link (example: /somthing/test/), otherwise the "if command" can be faulty, when the nodeUrl have the baseUrl included
-                        $exclude = true;
+                        $search = '/'. preg_quote($excludedLink,'/') .'.+/';      //escaped all possible regular expressions in the search Url
+                        //TODO wieder rausnehmen
+                        $this->testvariable[$this->j++] = $search;
+                        if(preg_match($search, $nodeUrl)){
+                            $exclude = true;
+                        }
+                    } else{
+                        if (substr($excludedLink, -1) == '/') {
+                            $excludedLink = substr($excludedLink, 0, -1);
+                        }
+                        if(strpos($nodeUrl,$excludedLink) !== false){           //if the excludedLink is in the nodeUrl, set exclude true, so the site with the excluded link don't get crawled. NOTE: excludedLink must be a Path link (example: /somthing/test/), otherwise the "if command" can be faulty, when the nodeUrl have the baseUrl included
+                            $exclude = true;
+                        }
                     }
                 }
             }           //Own End

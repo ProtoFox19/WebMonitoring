@@ -12,6 +12,28 @@
             {{ form_widget(editSitemapForm.notIncludedPath,{
                 'attr': {'class': 'form-control', 'placeholder': 'Not included Path (each Path belongs in a new Line)'}
             }) }}
+            <div class="info"><a href="#info"><i class="fa fa-info-circle" aria-hidden="true"></i></a></div>
+            <div id="info" class="messagehandling">
+                <div class="confirmation">
+                    <div class="headline">Information's</div>
+                    <a class="close" href="#"></a>
+                    <div class="inner">
+                        <div class="message">
+                            Correct: <br>
+                            /reference/site/ or /reference/site/more <br><br>
+                            Incorrect:<br>
+                            domain.de/reference/site<br><br>
+                            To exclude the children pages of a Path, add a * at the end of the Path:<br>
+                            /reference/site/*<br><br>
+
+                            Each excluded Path belongs in a new Line.
+                        </div>
+                        <div class="message-links">
+                            <a href="#" class="deletecancelbutton btn btn-default">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="formError">
             {{ form_errors(editSitemapForm.notIncludedPath) }}
