@@ -495,6 +495,13 @@ nav.headerNavigation{
     margin: 2px;
 }
 
+.expand .webButtons .websitelink{
+    float: right;
+    padding-right: 5px;
+    font-size: 26px;
+    line-height: 1;
+}
+
 .expand .functions{
     min-height: 40px;
     width: 65%;
