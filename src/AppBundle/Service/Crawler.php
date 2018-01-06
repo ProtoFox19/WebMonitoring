@@ -221,8 +221,6 @@ class Crawler
                     if (substr($excludedLink, -1) == '*') {
                         $excludedLink = substr($excludedLink, 0, -1);
                         $search = '/'. preg_quote($excludedLink,'/') .'.+/';      //escaped all possible regular expressions in the search Url
-                        //TODO wieder rausnehmen
-                        $this->testvariable[$this->j++] = $search;
                         if(preg_match($search, $nodeUrl)){
                             $exclude = true;
                         }
