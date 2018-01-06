@@ -22,23 +22,30 @@ class Crawler
     protected $links;
     protected $maxDepth;
     private $prereserveLinks = [];
+    private $excludedLinks =[];
+    private $webService;
 
     public $testvariable = [];
     public $testvariablezwei = [];
     public $j = 0;
     public $k = 0;
 
-    public function __construct()
+    public function __construct(WebService $webService)
     {
         $this->baseUrl = '';
         $this->links = [];
         $this->depth = 0;
+
+        $this->webService = $webService;
     }
 
     public function crawl($url, $maxDepth = 10)
     {
         $this->baseUrl = $url;
         $this->depth = $maxDepth;
+        $web = $this->webService->getWebByNameOrDomain($url);
+        $this->excludedLinks = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotIncludedPath());
+
 
         $this->spider($this->baseUrl, $maxDepth);
 
@@ -53,6 +60,7 @@ class Crawler
     public function setLinksBack(){
         $this->links = array();
         $this->prereserveLinks = array();
+        $this->excludedLinks = array();
     }
 
     private function spider($url, $maxDepth)
@@ -206,8 +214,20 @@ class Crawler
                 $this->testvariable[$this->j++] = $this->links[$fullUrl];
             }*/
 
+            $exclude = false;                                       //OWN Begin
+            foreach ($this->excludedLinks as $excludedLink){
+                if(!empty($excludedLink)){
+                    if (substr($excludedLink, -1) == '/') {
+                        $excludedLink = substr($excludedLink, 0, -1);
+                    }
+                    if(strpos($nodeUrl,$excludedLink) !== false){           //if the excludedLink is in the nodeUrl, set exclude true, so the site with the excluded link don't get crawled. NOTE: excludedLink must be a Path link (example: /somthing/test/), otherwise the "if command" can be faulty, when the nodeUrl have the baseUrl included
+                        $exclude = true;
+                    }
+                }
+            }           //Own End
+
             // If we don't have it lets collect it
-            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl])) {  //OWN: there must be a temporal reserving variable for the NodeURL, because of Asynchronous searching of the spiders
+            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL, because of Asynchronous searching of the spiders
                 $this->prereserveLinks[$nodeUrl] = $nodeUrl;    //OWN: set the temporal reserving
                 // set the basics
                 $currentLinks[$nodeUrl]['is_external'] = false;

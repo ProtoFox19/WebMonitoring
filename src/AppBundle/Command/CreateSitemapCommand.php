@@ -51,8 +51,14 @@ class CreateSitemapCommand extends ContainerAwareCommand
         if($domain!== NULL){
             $web = $this->getContainer()->get(WebService::class)->getWebByNameOrDomain($domain);
             if($web !== NULL){
-                $this->generateSitemap($web->getDomain());
-                //$output->writeln($web->getDomain());
+                if($web->getActive() && $web->getSitemapSettings()->getActive()){
+                    $this->generateSitemap($web->getDomain());
+                    //$output->writeln($web->getDomain());
+                } else {
+                    $output->writeln('The Web or the SitemapSettings for the Web isn\'t active. Set it active when you want to create a Sitemap.xml');
+                }
+            } else {
+                $output->writeln('No Web is found under this name!');
             }
         } else{
             $webs = $this->getContainer()->get(WebService::class)->getWebs();
@@ -73,7 +79,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
     }
 
     public function generateSitemap($domain){
-         $domainname = str_replace(['http://', 'https://', '.de', '.com', 'www.', '.eu'], '', $domain);
+         $domainname = str_replace(['http://', 'https://', 'www.'], '', $domain);
          $path = './sitemaps/'.$domainname.'/';
          if (!file_exists($path)) {
              mkdir($path, 0777, true);

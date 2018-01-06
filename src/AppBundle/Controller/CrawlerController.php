@@ -39,7 +39,7 @@ class CrawlerController extends Controller
 
         $form = $this->createForm(EditSitemapSettingsFormType::class, $sitemapSetting);
         $form->handleRequest($request);
-        $sitemapSettingttt = $form->getData();
+        $sitemapSettingtest = $form->getData();
         if($form->isSubmitted() && $form->isValid()){
             $sitemapSetting = $form->getData();
             $sitemapSetting->setWeb($web);  //for safety
@@ -54,12 +54,13 @@ class CrawlerController extends Controller
 
         return $this->render('crawler/show.html.twig', [
             'web' => $web,
-            'test' => $sitemapSettingttt,
+            'test' => preg_split('/\r\n|\r|\n/',$sitemapSettingtest->getNotIncludedPath()),
             'editSitemapForm' => $form->createView()
         ]);
     }
 
     /**
+     * Just for Testing!
      * @Route("/{id}/crawling_web", name="crawling_web")
      * @param Web $web
      * @return \Symfony\Component\HttpFoundation\Response
@@ -95,6 +96,7 @@ class CrawlerController extends Controller
 
 
     /**
+     * Just for Testing!
      * @Route("/{id}/create_sitemap", requirements={"id" = "\d+"}, name="create_sitemap")
      * @param Web $web
      * @param KernelInterface $kernel
