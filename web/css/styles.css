@@ -42,6 +42,10 @@ h1{
     }
 }
 
+.btn{
+    cursor: pointer;
+}
+
 .btn-primary {
     background-color: #003A61;
     border-color: #003A61;

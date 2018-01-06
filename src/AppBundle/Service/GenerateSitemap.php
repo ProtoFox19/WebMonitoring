@@ -14,23 +14,37 @@ class GenerateSitemap
 {
     private $links;
     private $name;
+    private $webService;
+    private $notablyPath = [];
 
-    public function __construct()
+    public function __construct(WebService $webService)
     {
         $this->links = $links = [];
         $this->name = $name ='';
+        $this->webService = $webService;
     }
 
-    public function generateSitemap($links, $name){
+    public function generateSitemap($links, $domain){
         sort($links);
         $this->links = $links;
-        $this->name = $name;
+        $this->name = str_replace(['http://', 'https://', 'www.'], '', $domain);
+        $this->getNotablyPath($domain);
 
         if(count($this->links) > 50000){
             $this->divideSitemap();
         } else{
            $xml = $this->getSitemap($this->links);
            $this->safeSitemap($xml);
+        }
+    }
+
+    private function getNotablyPath($domain){
+        $web = $this->webService->getWebByNameOrDomain($domain);
+        $this->notablyPath = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotablyPath());
+        $i=0;
+        foreach ($this->notablyPath as $path){
+            $this->notablyPath[$i] = explode('|',$path);
+            $i++;
         }
     }
 
@@ -78,8 +92,21 @@ class GenerateSitemap
         $xml.= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n";
 
         foreach ($links as $link) {
+            $changefreq = 'monthly';
+            $priority = '0.5';
+            foreach ($this->notablyPath as $notably){
+                if(!empty($notably)){
+                    $search = '/'. preg_quote($notably[0],'/') .'.+/';      //escaped all possible regular expressions in the search Url
+                    if(!preg_match($search, $link['url']) && strpos($link['url'],$notably[0]) !== false){    //strpos: if path was found, preg_match: but not the children pages
+                        $changefreq = $notably[1];
+                        $priority = $notably[2];
+                    }
+                }
+            }
             $xml.= "\t" .'<url>'."\n";
             $xml.= "\t" ."\t" .'<loc>'. $link['url'] .'</loc>'. "\n";
+            $xml.= "\t" ."\t" .'<changefreq>'. $changefreq .'</changefreq>'. "\n";
+            $xml.= "\t" ."\t" .'<priority>'. $priority .'</priority>'. "\n";
             $xml.= "\t" .'</url>'."\n";
         }
 

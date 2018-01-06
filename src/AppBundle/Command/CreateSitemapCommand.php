@@ -79,23 +79,23 @@ class CreateSitemapCommand extends ContainerAwareCommand
     }
 
     public function generateSitemap($domain){
-         $domainname = str_replace(['http://', 'https://', 'www.'], '', $domain);
-         $path = './sitemaps/'.$domainname.'/';
-         if (!file_exists($path)) {
-             mkdir($path, 0777, true);
-         }
-         $crawler = $this->getContainer()->get(Crawler::class);
+        $domainname = str_replace(['http://', 'https://', 'www.'], '', $domain);
+        $path = './sitemaps/'.$domainname.'/';
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+        $crawler = $this->getContainer()->get(Crawler::class);
 
-         $dom = $crawler->crawl($domain, 10);
-         $validLinks = array();
-         $i=0;
-         foreach ($dom->links() as $link) {
-             if ($link['visited']) {
-                 $validLinks[$i] = $link;
-                 $i++;
-             }
-         }
-         $dom->setLinksBack();
+        $dom = $crawler->crawl($domain, 10);
+        $validLinks = array();
+        $i=0;
+        foreach ($dom->links() as $link) {
+            if ($link['visited']) {
+                $validLinks[$i] = $link;
+                $i++;
+            }
+        }
+        $dom->setLinksBack();
 
         //TODO for testing (sitemaps over 50000 links) - everything is alright
         /*$validLinks = [];
@@ -103,9 +103,9 @@ class CreateSitemapCommand extends ContainerAwareCommand
             $validLinks[$i]['url'] = 'nureintest.de'.$i;
         }*/
 
-          $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
-          $sitemapGenerator->generateSitemap($validLinks,$domainname);
+        $sitemapGenerator = $this->getContainer()->get(GenerateSitemap::class);
+        $sitemapGenerator->generateSitemap($validLinks,$domain);
 
-          return $dom->links();
+        return $dom->links();
     }
 }

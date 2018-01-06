@@ -12,10 +12,10 @@
             {{ form_widget(editSitemapForm.notIncludedPath,{
                 'attr': {'class': 'form-control', 'placeholder': 'Not included Path (each Path belongs in a new Line)'}
             }) }}
-            <div class="info"><a href="#info"><i class="fa fa-info-circle" aria-hidden="true"></i></a></div>
-            <div id="info" class="messagehandling">
+            <div class="info"><a href="#info-notIncludedPath"><i class="fa fa-info-circle" aria-hidden="true"></i></a></div>
+            <div id="info-notIncludedPath" class="messagehandling">
                 <div class="confirmation">
-                    <div class="headline">Information's</div>
+                    <div class="headline">Information's about excluding path's</div>
                     <a class="close" href="#"></a>
                     <div class="inner">
                         <div class="message">
@@ -23,10 +23,10 @@
                             /reference/site/ or /reference/site/more <br><br>
                             Incorrect:<br>
                             domain.de/reference/site<br><br>
-                            To exclude the children pages of a Path, add a * at the end of the Path:<br>
+                            To exclude the children pages of a path, add a * at the end of the path:<br>
                             /reference/site/*<br><br>
 
-                            Each excluded Path belongs in a new Line.
+                            Each excluded path belongs in a new line.
                         </div>
                         <div class="message-links">
                             <a href="#" class="deletecancelbutton btn btn-default">Close</a>
@@ -41,8 +41,39 @@
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-sort-numeric-asc" aria-hidden="true"></i></span>
             {{ form_widget(editSitemapForm.notablyPath,{
-                'attr': {'class': 'form-control', 'placeholder': 'Path|Priority|changefrquenzy'}
+                'attr': {'class': 'form-control', 'placeholder': 'Path|changefrquenzy|Priority'}
             }) }}
+            <div class="info"><a href="#info-notablyPath"><i class="fa fa-info-circle" aria-hidden="true"></i></a></div>
+            <div id="info-notablyPath" class="messagehandling">
+                <div class="confirmation">
+                    <div class="headline">Information's about notably path's</div>
+                    <a class="close" href="#"></a>
+                    <div class="inner">
+                        <div class="message">
+                            In this Textarea you can add path's that have special frequency or priority.<br>
+                            First you have to add the path, followed by a '|', than the frequency, also followed by a '|' and than the priority.<br>
+                            example: ref/site/destination|daily|0.8<br>
+                            If you want to add the startpage of the website, just set the domain as the path. <br>
+                            The frequency can have the followed values:<br>
+                            <ul>
+                                <li>always</li>
+                                <li>hourly</li>
+                                <li>daily</li>
+                                <li>weekly</li>
+                                <li>monthly</li>
+                                <li>yearly</li>
+                                <li>never</li>
+                            </ul>
+                            The priority have a value between 0 and 1.<br>
+                            The children pages of a given Path are not affected.<br>
+                            Each notably path belongs in a new line.
+                        </div>
+                        <div class="message-links">
+                            <a href="#" class="deletecancelbutton btn btn-default">Close</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="formError">
             {{ form_errors(editSitemapForm.notablyPath) }}
