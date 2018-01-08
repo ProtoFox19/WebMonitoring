@@ -19,8 +19,8 @@ class GenerateSitemap
 
     public function __construct(WebService $webService)
     {
-        $this->links = $links = [];
-        $this->name = $name ='';
+        $this->links = [];
+        $this->name = '';
         $this->webService = $webService;
     }
 
