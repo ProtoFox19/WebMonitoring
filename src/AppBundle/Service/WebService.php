@@ -12,6 +12,7 @@ namespace AppBundle\Service;
 use AppBundle\Entity\SitemapSettings;
 use AppBundle\Entity\Web;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 class WebService
 {
@@ -24,7 +25,7 @@ class WebService
      * WebService constructor.
      * @param EntityManager $em
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
     }
