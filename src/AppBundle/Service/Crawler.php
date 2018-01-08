@@ -44,6 +44,11 @@ class Crawler
     {
         $this->baseUrl = $url;
         $this->depth = $maxDepth;
+
+        /*$this->links = array();               see "setLinksBack"
+        $this->prereserveLinks = array();
+        $this->excludedLinks = array();*/
+
         $web = $this->webService->getWebByNameOrDomain($url);
         $this->excludedLinks = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotIncludedPath());
 
@@ -58,11 +63,11 @@ class Crawler
         return $this->links;
     }
 
-    public function setLinksBack(){
-        $this->links = array();
-        $this->prereserveLinks = array();
-        $this->excludedLinks = array();
-    }
+    public function setLinksBack(){         //Own Begin: Because how Services works, only one instance is generated.
+        $this->links = array();             //When this instance is used to crawl more than one website, the links of the previous websites would also be in the links array's, because the constructor isn'´called twice
+        $this->prereserveLinks = array();   //therefor this function
+        $this->excludedLinks = array();     //an other Method would be to set the array's in the function "crawl" back. because "crawl" initiates the whole process, reason why i´ve done it separate: i want to reserve the option, that i can crawl two sites and bundle the links (example: sitename.de and shop.sitename.de)
+    }                                       //Own End
 
     private function spider($url, $maxDepth)
     {
