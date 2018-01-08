@@ -7,6 +7,8 @@ Mediaquery´s are allways on the end of a Sitesection, except the "LOGIN" Sectio
 */
 body{
     font-family: 'Source Sans Pro',Helvetica,Arial,sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
 }
 
 a, a:visited {
@@ -25,6 +27,7 @@ h1,h2,h3,h4{
 
 h1{
     font-size: 22px;
+    padding-top: 5px;
 }
 
 .container{
@@ -37,6 +40,10 @@ h1{
     .container {
         max-width: 100%;
     }
+}
+
+.btn{
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -84,13 +91,18 @@ h1{
     color: #003A61;
 }
 
-input.form-control{
+input.form-control, textarea.form-control{
     z-index: 0 !important;
     box-shadow: inset 0 0 0px 9999px white !important;
+    white-space: pre-line;
 }
 
-input.form-control:focus{
+input.form-control:focus, textarea.form-control:focus{
     border: 1px solid #F7A800 !important;
+}
+
+textarea{
+    min-height: 8em;
 }
 
 
@@ -451,6 +463,7 @@ nav.headerNavigation{
     max-height: 10em;
     min-height: 61px;
     overflow: auto;
+    padding: 5px;
 }
 
 .expand .webButtons{
@@ -482,15 +495,34 @@ nav.headerNavigation{
     margin: 2px;
 }
 
-.expand .bundles{
+.expand .webButtons .websitelink{
+    float: right;
+    padding-right: 5px;
+    font-size: 26px;
+    line-height: 1;
+}
+
+.expand .functions{
     min-height: 40px;
     width: 65%;
 }
 
-.expand .bundles .bundleLinks{
+.expand .functions .functionLink{
     display: block;
     float: left;
-    width: 100px;
+    padding: 5px;
+    position: relative;
+}
+
+.expand .functions .functionLink:first-child{
+    padding-left: 0;
+}
+
+.expand .functions .functionLink + .functionLink:before{
+    content: '|';
+    margin-left: -6px;
+    padding-right: 5px;
+    color: #212529;
 }
 
 .accordion label::after {
@@ -516,7 +548,7 @@ nav.headerNavigation{
 
 /*delete message*/
 
-.delete {
+.messagehandling {
     position: fixed;
     top: 0;
     bottom: 0;
@@ -528,12 +560,12 @@ nav.headerNavigation{
     opacity: 0;
     z-index: 2;
 }
-.delete:target {
+.messagehandling:target {
     visibility: visible;
     opacity: 1;
 }
 
-.delete .confirmation {
+.messagehandling .confirmation {
     margin: 5% auto;
     position: relative;
     padding: 20px;
@@ -546,28 +578,28 @@ nav.headerNavigation{
     /*transition: all 5s ease-in-out;*/
 }
 
-.delete .confirmation .headline{
+.messagehandling .confirmation .headline{
     font-size: 20px;
     color: #003A61;
 }
 
-.delete .confirmation .close {
+.messagehandling .confirmation .close {
     position: absolute;
     top: 15px;
     right: 30px;
     font-size: 20px;
 }
 
-.delete .confirmation .close:after{
+.messagehandling .confirmation .close:after{
     content: "\f00d";
     font-family: FontAwesome;
 }
 
-.delete .confirmation .close:hover {
+.messagehandling .confirmation .close:hover {
     color: #003A61;
 }
 
-.delete .confirmation .inner .message{
+.messagehandling .confirmation .inner .message{
     max-height: 30vh;
     overflow: auto;
     margin-bottom: 10px;
@@ -585,20 +617,41 @@ nav.headerNavigation{
     .webNavi .input-group.search {
         width: 100%;
     }
+
+    .expand .functions .functionLink{
+        float: none;
+        display: block;
+        padding: 4px 0 0;
+    }
+
+    .expand .functions .functionLink + .functionLink:before{
+        content: '';
+        margin-left: 0px;
+        padding-right: 0px;
+    }
 }
 /*HOMEPAGE/STARTPAGE END*/
 
-/*NEW_USER/CHANGE_PASSWORD/NEW_WEB*/
+/*FORMS BEGIN*/
 .form{
     width: 60%;
     margin: 10px auto;
+}
+
+.newFormLabel{
+    padding-right: 5px;
+}
+
+.input-group .info{
+    position: absolute;
+    right: 10px;
+    top: 5px;
 }
 
 @media (max-width: 767px) {
     .form{
         width: 100%;
     }
-
 }
 
-/*NEW_USER/CHANGE_PASSWORD/NEW_WEB END*/
+/*FORMS END*/

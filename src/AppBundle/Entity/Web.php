@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,6 +44,17 @@ class Web
      * @ORM\Column(type="boolean")
      */
     private $active = true;
+
+    /**
+     * The relation is not displayed in the Database, just for Doctrine (for mapping, so an extra query isn't used)
+     * @ORM\OneToOne(targetEntity="SitemapSettings", mappedBy="web", orphanRemoval=true)
+     */
+    private $sitemapSettings;
+
+  /*  public function __construct()
+    {
+        $this->sitemapSettings = new ArrayCollection();
+    }*/
 
     /**
      * @return integer
@@ -99,6 +111,16 @@ class Web
     {
         $this->active = $active;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSitemapSettings()
+    {
+        return $this->sitemapSettings;
+    }
+
+
 
 
 }

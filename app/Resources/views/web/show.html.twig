@@ -19,23 +19,26 @@
         {% for web in webs %}
             <div class="accordion" data-name="{{ web.name }}" data-domain="{{ web.domain }}">
                 <input id="{{ web.name }}" type="checkbox">
-                <label {% if not web.active %}class="inactive"{% endif %} for="{{ web.name }}"><span class="name">{{ web.name }}</span> | <span class="domain">{{ web.domain }}</span></label>
+                <label {% if not web.active %}class="inactive"{% endif %} for="{{ web.name }}">
+                    <span class="name">{{ web.name }}</span> | <span class="domain">{{ web.domain }}</span>
+                </label>
                 <div class="expand">
                     <div class="webButtons">
                         <a href="#del-{{ web.name }}" class="btn btn-danger">Delete</a>
                         <a href="{{ path('edit_web', {'id': web.id }) }}" class="btn btn-default">Edit</a>
+                        <div class="websitelink"><a href="{{ web.domain }}" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a></div>
                     </div>
-                    <div class="bundles">
-                        <a href="#" class="bundleLinks">other links</a>
-                        <a href="#" class="bundleLinks">other links</a>
-                        <a href="#" class="bundleLinks">other links</a>
-                        <a href="#" class="bundleLinks">other links</a>
-                        <a href="#" class="bundleLinks">other links</a>
+                    <div class="functions">
+                        <a href="{{ path('sitemap_options', {'id': web.id }) }}" class="functionLink">Sitemap Options</a>
+                        <a href="#" class="functionLink">other links</a>
+                        <a href="#" class="functionLink">other links</a>
+                        <a href="#" class="functionLink">other links</a>
+                        <a href="#" class="functionLink">other links</a>
                     </div>
                 </div>
             </div>
 
-            <div id="del-{{ web.name }}" class="delete">
+            <div id="del-{{ web.name }}" class="messagehandling">
                 <div class="confirmation">
                     <div class="headline">Delete Web: {{ web.name }}? </div>
                     <a class="close" href="#"></a>
