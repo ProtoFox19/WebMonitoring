@@ -73,7 +73,9 @@ class Crawler
     {
 
         try {
-
+            //$this->testvariable[$this->j++] = memory_get_usage();
+            $bla = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
+            print_r($bla);
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //OWN Begin: the following if´s consider all types of url´s
             if((strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0)&& strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;
@@ -204,7 +206,7 @@ class Crawler
         $dom->filter('a')->each(function(DomCrawler $node, $i) use (&$currentLinks) {
             // get the href
             $nodeUrl = $node->attr('href');
-
+            // ToDo Checken ob href # ist
             $fullUrl ='';   //OWN Begin: because the $nodeUrl could have just a part url, the full url must be build
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
             if((strpos($nodeUrl,"/") === 0 || strpos($nodeUrl,"./") === 0 || strpos($nodeUrl,"../") === 0)&& strpos($nodeUrl, $baseUrl) === false){

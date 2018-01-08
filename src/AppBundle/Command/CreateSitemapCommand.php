@@ -45,7 +45,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        ini_set('memory_limit', 277872640);
+        //ini_set('memory_limit', 277872640);
         $domain = $input->getArgument('domain_name');
         $web = NULL;
         if($domain!== NULL){
