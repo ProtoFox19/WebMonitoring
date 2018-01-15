@@ -53,11 +53,19 @@ class SitemapController extends Controller
 
             return $this->redirectToRoute('sitemap_options',array('id' => $web->getId()));
         }
-
-        //$downloadlink = '../sitemaps/' . str_replace(['http://', 'https://', 'www.'], '', $web->getDomain()) . '/sitemap.zip';
+        $lastMod = '';
+        $domain = str_replace(['http://', 'https://', 'www.'], '', $web->getDomain());
+        if (substr($domain, -1) == '/') {
+            $domain = substr($domain, 0, -1);
+        }
+        if(file_exists($this->get('kernel')->getRootDir().'/../sitemaps/' . $domain . '/sitemap.zip')){
+            $xmlFile = new File($this->get('kernel')->getRootDir().'/../sitemaps/' . $domain . '/sitemap.zip');
+            $lastMod = date("Y-m-d H:i:s",$xmlFile->getMTime());
+        }
 
         return $this->render('sitemap/show.html.twig', [
             'web' => $web,
+            'lastMod' => $lastMod,
             'test' => preg_split('/\r\n|\r|\n/',$sitemapSettingtest->getNotIncludedPath()),
             'editSitemapForm' => $form->createView()
         ]);
