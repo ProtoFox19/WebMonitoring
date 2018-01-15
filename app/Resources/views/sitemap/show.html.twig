@@ -7,6 +7,7 @@
     <!--{{ dump(test) }}-->
     {{ form_start(editSitemapForm) }}
     <div class="form">
+        <div class="inner-headline">Not included Path's</div>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-times" aria-hidden="true"></i></span>
             {{ form_widget(editSitemapForm.notIncludedPath,{
@@ -38,6 +39,7 @@
         <div class="formError">
             {{ form_errors(editSitemapForm.notIncludedPath) }}
         </div>
+        <div class="inner-headline">Notably Path's</div>
         <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-sort-numeric-asc" aria-hidden="true"></i></span>
             {{ form_widget(editSitemapForm.notablyPath,{
@@ -84,7 +86,7 @@
         <div class="alert alert-info">When the Sitemap Options aren't active, the sitemap.xml will not generate automatically!</div>
 
         <button type="submit" class="btn btn-primary">Save</button>
-        {% if lastMod is not empty %}<a href="{{ path('sitemapDownload', {'id': web.id}) }}"><div class="btn btn-warning">Download Sitemap</div></a> - last modify {{ lastMod }}{% endif %}
+        {% if lastMod is not empty %}<a href="{{ path('sitemapDownload', {'id': web.id}) }}"><div class="btn btn-warning">Download Sitemap</div></a> - last modify: {{ lastMod }}{% endif %}
     </div>
     {{ form_end(editSitemapForm) }}
 

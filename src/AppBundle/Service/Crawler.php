@@ -25,8 +25,9 @@ class Crawler
     private $prereserveLinks = [];  //Own
     private $excludedLinks =[];     //Own
     private $webService;            //Own
+    private $functionality;
 
-    public $testvariable = [];
+    public $testvariable = [];      //Own Variables for testing
     public $testvariablezwei = [];
     public $j = 0;
     public $k = 0;
@@ -40,18 +41,20 @@ class Crawler
         $this->webService = $webService;    //Own
     }
 
-    public function crawl($url, $maxDepth = 10)
+    public function crawl($url, $maxDepth = 10, $functionality = 'sitemap')
     {
         $this->baseUrl = $url;
         $this->depth = $maxDepth;
+        $this->functionality = $functionality;
 
         /*$this->links = array();               see "setLinksBack"
         $this->prereserveLinks = array();
         $this->excludedLinks = array();*/
 
-        $web = $this->webService->getWebByNameOrDomain($url);
-        $this->excludedLinks = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotIncludedPath());
-
+        if($this->functionality === 'sitemap'){     //Own standart is sitemap, but for maybe for future functions the crawler is needed for other things with other needs
+            $web = $this->webService->getWebByNameOrDomain($url);
+            $this->excludedLinks = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotIncludedPath());
+        }
 
         $this->spider($this->baseUrl, $maxDepth);
 
@@ -99,7 +102,7 @@ class Crawler
 
             // Create a client and send out a request to a url
             $client = new Client();
-            $crawler = $client->request('GET', $url);
+            $crawler = $client->request('GET', $url,['allow_redirects' => false]);      //own don't allow redirects
 
             // get the content of the request result
             $html = $crawler->getBody()->getContents();
@@ -198,7 +201,6 @@ class Crawler
 
     private function extractLinks($html, $url)
     {
-
         $dom = new DomCrawler($html);
         $currentLinks = [];
 
@@ -222,25 +224,28 @@ class Crawler
                 $this->testvariable[$this->j++] = $this->links[$fullUrl];
             }*/
 
-            $exclude = false;                                       //OWN Begin
-            foreach ($this->excludedLinks as $excludedLink){
-                if(!empty($excludedLink)){
-                    if (substr($excludedLink, -1) == '*') {
-                        $excludedLink = substr($excludedLink, 0, -1);
-                        $search = '/'. preg_quote($excludedLink,'/') .'.+/';      //escaped all possible regular expressions in the search Url
-                        if(preg_match($search, $nodeUrl)){
-                            $exclude = true;
-                        }
-                    } else{
-                        if (substr($excludedLink, -1) == '/') {
+            $exclude = false;                                       //Own Begin
+            if($this->functionality === 'sitemap'){                 //if the crawler is crawling for Sitemapgenerator, note excluded Links
+                foreach ($this->excludedLinks as $excludedLink){
+                    if(!empty($excludedLink)){
+                        if (substr($excludedLink, -1) == '*') {
                             $excludedLink = substr($excludedLink, 0, -1);
-                        }
-                        if(strpos($nodeUrl,$excludedLink) !== false){           //if the excludedLink is in the nodeUrl, set exclude true, so the site with the excluded link don't get crawled. NOTE: excludedLink must be a Path link (example: /somthing/test/), otherwise the "if command" can be faulty, when the nodeUrl have the baseUrl included
-                            $exclude = true;
+                            $search = '/'. preg_quote($excludedLink,'/') .'.+/';      //escaped all possible regular expressions in the search Url
+                            if(preg_match($search, $nodeUrl)){
+                                $exclude = true;
+                            }
+                        } else{
+                            if (substr($excludedLink, -1) == '/') {
+                                $excludedLink = substr($excludedLink, 0, -1);
+                            }
+                            if(strpos($nodeUrl,$excludedLink) !== false){           //if the excludedLink is in the nodeUrl, set exclude true, so the site with the excluded link don't get crawled. NOTE: excludedLink must be a Path link (example: /somthing/test/), otherwise the "if command" can be faulty, when the nodeUrl have the baseUrl included
+                                $exclude = true;
+                            }
                         }
                     }
                 }
             }           //Own End
+
 
             // If we don't have it lets collect it
             if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL, because of Asynchronous searching of the spiders

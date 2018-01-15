@@ -648,6 +648,11 @@ nav.headerNavigation{
     top: 5px;
 }
 
+.inner-headline{
+    color: #104a6d;
+    font-size: 1.25rem;
+}
+
 @media (max-width: 767px) {
     .form{
         width: 100%;
