@@ -12,13 +12,15 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Service\Crawler;
 use AppBundle\Command\CreateSitemapCommand;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Process\Process;
 
-class CrawlerController extends Controller
+class SitemapController extends Controller
 {
     /**
      * @Route("/{id}/sitemap_options", name="sitemap_options")
@@ -52,11 +54,32 @@ class CrawlerController extends Controller
             return $this->redirectToRoute('sitemap_options',array('id' => $web->getId()));
         }
 
-        return $this->render('crawler/show.html.twig', [
+        //$downloadlink = '../sitemaps/' . str_replace(['http://', 'https://', 'www.'], '', $web->getDomain()) . '/sitemap.zip';
+
+        return $this->render('sitemap/show.html.twig', [
             'web' => $web,
             'test' => preg_split('/\r\n|\r|\n/',$sitemapSettingtest->getNotIncludedPath()),
             'editSitemapForm' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/{id}/sitemapDownload", name="sitemapDownload")
+     * @param Web $web
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadAction(Web $web){
+        $domain = str_replace(['http://', 'https://', 'www.'], '', $web->getDomain());
+        if (substr($domain, -1) == '/') {
+            $domain = substr($domain, 0, -1);
+        }
+
+        $xmlFile = new File($this->get('kernel')->getRootDir().'/../sitemaps/' . $domain . '/sitemap.zip');
+        if(!$xmlFile->isFile()){
+            throw $this->createNotFoundException();
+        }
+
+        return $this->file($xmlFile, $web->getName().'_sitemap.zip');
     }
 
     /**
@@ -86,7 +109,7 @@ class CrawlerController extends Controller
             }
         }
 
-        return $this->render('crawler/show_crawling.html.twig', [
+        return $this->render('sitemap/show_crawling.html.twig', [
             'web' => $web,
             'links' => $links,
             'test' => $test,
@@ -100,13 +123,16 @@ class CrawlerController extends Controller
      * @Route("/{id}/create_sitemap", requirements={"id" = "\d+"}, name="create_sitemap")
      * @param Web $web
      * @param KernelInterface $kernel
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return
      */
     public function createSitemapAction(Web $web, KernelInterface $kernel){
         $test='';
         $testzwei ='';
         $content ='';
         $domain = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $web->getDomain());
+        $process = new Process('php bin/console app:create-Sitemap TestingDomain.de');
+        $process->setWorkingDirectory('../');
+        $process->run();
 
         /*  $application = new Application($kernel);
           $application->setAutoExit(false);
@@ -138,7 +164,7 @@ class CrawlerController extends Controller
         }*/
 
 
-        if (substr(php_uname(), 0, 7) == "Windows"){
+       /* if (substr(php_uname(), 0, 7) == "Windows"){
             chdir('C:\xampp\htdocs\Symfony\WebMonitoring');
             // $test = getcwd();
             // pclose(popen("start /B " . "php " . " " . escapeshellarg("bin/console " . (new CreateSitemapCommand())->getName().' '. $web->getDomain()), "r"));
@@ -147,10 +173,15 @@ class CrawlerController extends Controller
         } else {
             $testzwei = 'wut';
             exec("./" . "php" . " " . escapeshellarg("C:\xampp\htdocs\Symfony\WebMonitoring\src\AppBundle\Service\GenerateSitemap.php") . " > /dev/null &");
-        }
+        }*/
 
-        $this->addFlash('success', 'The Sitemap will be generated. It may take some time.');
-
-        return $this->redirectToRoute('homepage');
+        //$this->addFlash('success', 'The Sitemap will be generated. It may take some time.' . $process);
+        //return $this->redirectToRoute('homepage');
+        return $this->render('sitemap/show_crawling.html.twig', [
+            'web' => $web,
+            'links' => $process->getOutput(),
+            'test' => $test,
+            'testzwei' => $testzwei
+        ]);
     }
 }

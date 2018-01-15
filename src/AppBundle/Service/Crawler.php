@@ -74,8 +74,8 @@ class Crawler
 
         try {
             //$this->testvariable[$this->j++] = memory_get_usage();
-            $bla = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
-            print_r($bla);
+            /*$bla = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
+            print_r($bla);*/
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //OWN Begin: the following if´s consider all types of url´s
             if((strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0)&& strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;

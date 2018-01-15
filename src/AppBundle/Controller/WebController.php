@@ -67,7 +67,7 @@ class WebController extends Controller
 
 
     /**
-     * @Route("/{id}/edit", name="edit_web")
+     * @Route("/{id}/edit", requirements={"id" = "\d+"}, name="edit_web")
      */
     public function editWebAction(Request $request, Web $web)
     {

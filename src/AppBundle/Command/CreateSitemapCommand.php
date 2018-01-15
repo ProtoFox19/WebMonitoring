@@ -61,7 +61,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
                 $output->writeln('No Web is found under this name!');
             }
         } else{
-            $webs = $this->getContainer()->get(WebService::class)->getWebs();
+            $webs = $this->getContainer()->get(WebService::class)->getWebs();       //TODO nur aktive Webs holen
             foreach ($webs as $web){
                 if(!is_null($web->getSitemapSettings())){                               //Wenn Webs are not created with the Webinterface, they might not have SitemapSettings yet
                     if($web->getActive() && $web->getSitemapSettings()->getActive()){
@@ -74,8 +74,6 @@ class CreateSitemapCommand extends ContainerAwareCommand
                 }
             }
         }
-
-
     }
 
     public function generateSitemap($domain){

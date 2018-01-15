@@ -35,6 +35,19 @@ class GenerateSitemap
         } else{
            $xml = $this->getSitemap($this->links);
            $this->safeSitemap($xml);
+
+            if(file_exists('./sitemaps/'. $this->name . "/sitemap.zip")){
+                unlink('./sitemaps/'. $this->name . "/sitemap.zip");
+
+            }
+            $zip = new \ZipArchive();
+            $zipname = './sitemaps/'. $this->name . "/sitemap.zip";
+            if ($zip->open($zipname, \ZipArchive::CREATE)===TRUE) {
+                $zip->addFile('./sitemaps/'. $this->name .'/sitemap.xml', 'sitemap.xml');
+                $zip->close();
+            }else {
+                exit("cannot open <$zipname>\n");
+            }
         }
     }
 
@@ -72,6 +85,23 @@ class GenerateSitemap
 
         $xml = $this->createMasterSitemap($numberOfSitemaps);
         $this->safeSitemap($xml);
+
+        if(file_exists('./sitemaps/'. $this->name . "/sitemap.zip")){
+            unlink('./sitemaps/'. $this->name . "/sitemap.zip");
+
+        }
+        $zip = new \ZipArchive();
+        $zipname = './sitemaps/'. $this->name . "/sitemap.zip";
+        if ($zip->open($zipname, \ZipArchive::CREATE)===TRUE) {
+            for($i=0; $i < $numberOfSitemaps; $i++){
+                $zip->addFile('./sitemaps/'.$this->name.'/sitemap'.($i+1).'.xml', 'sitemap'.($i+1).'.xml');
+            }
+            $zip->addFile('./sitemaps/'.$this->name.'/sitemap.xml', 'sitemap.xml');
+            $zip->close();
+        }else {
+            exit("cannot open <$zipname>\n");
+        }
+
     }
 
     private function createMasterSitemap($numberOfSitemaps){
