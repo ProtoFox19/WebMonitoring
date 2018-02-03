@@ -28,7 +28,7 @@ class SitemapController extends Controller
      * @param Web $web
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showSitemapOption(Request $request, Web $web){
+    public function showSitemapOptionAction(Request $request, Web $web){
         $sitemapSetting = $web->getSitemapSettings();
         if(is_null($sitemapSetting)){   //when the path is called the first time and the web has no settinginformation (case if the web is not created over the webinterface), set a default setting automatically
             $newSitemapSetting = $this->get(SitemapService::class)->createDefaultSitemapSetting($web);
