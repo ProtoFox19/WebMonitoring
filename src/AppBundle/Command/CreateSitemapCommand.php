@@ -11,6 +11,7 @@ namespace AppBundle\Command;
 
 use AppBundle\Service\Crawler;
 use AppBundle\Service\GenerateSitemap;
+use AppBundle\Service\SitemapService;
 use AppBundle\Service\WebService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
@@ -51,7 +52,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
         if($domain!== NULL){
             $web = $this->getContainer()->get(WebService::class)->getWebByNameOrDomain($domain);
             if($web !== NULL){
-                if($web->getActive() && $web->getSitemapSettings()->getActive()){
+                if(!is_null($web->getSitemapSettings()) && $web->getActive() && $web->getSitemapSettings()->getActive()){
                     $this->generateSitemap($web->getDomain());
                     //$output->writeln($web->getDomain());
                 } else {
@@ -63,14 +64,22 @@ class CreateSitemapCommand extends ContainerAwareCommand
         } else{
             $webs = $this->getContainer()->get(WebService::class)->getWebs();       //TODO nur aktive Webs holen
             foreach ($webs as $web){
-                if(!is_null($web->getSitemapSettings())){                               //Wenn Webs are not created with the Webinterface, they might not have SitemapSettings yet
-                    if($web->getActive() && $web->getSitemapSettings()->getActive()){
-                        $test = $this->generateSitemap($web->getDomain());
-                        /*foreach ($test as $link){
-                            $output->writeln($link['url']);
-                        }
-                        $output->writeln('------------------------------');*/
+                if(is_null($web->getSitemapSettings())){                               //Wenn Webs are not created with the Webinterface, they might not have SitemapSettings yet
+                    $newSitemapSetting = $this->getContainer()->get(SitemapService::class)->createDefaultSitemapSetting($web);
+                    $em = $this->getContainer()->get('doctrine')->getManager();
+                    $em->persist($newSitemapSetting);
+                    $em->flush();
+                    $newWeb = $this->getContainer()->get(WebService::class)->getWebByNameOrDomain($web->getDomain());
+                    if($newWeb->getActive() && $newWeb->getSitemapSettings()->getActive()){
+                        $this->generateSitemap($newWeb->getDomain());
                     }
+                }
+                else if($web->getActive() && $web->getSitemapSettings()->getActive()){
+                    $test = $this->generateSitemap($web->getDomain());
+                    /*foreach ($test as $link){
+                        $output->writeln($link['url']);
+                    }
+                    $output->writeln('------------------------------');*/
                 }
             }
         }
