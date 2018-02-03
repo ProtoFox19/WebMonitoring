@@ -34,7 +34,7 @@ class GenerateSitemap
             $this->divideSitemap();
         } else{
            $xml = $this->getSitemap($this->links);
-           $this->safeSitemap($xml);
+           $this->saveSitemap($xml);
 
             if(file_exists('./sitemaps/'. $this->name . "/sitemap.zip")){
                 unlink('./sitemaps/'. $this->name . "/sitemap.zip");
@@ -61,7 +61,7 @@ class GenerateSitemap
         }
     }
 
-    private function safeSitemap($xml, $number = NULL){
+    private function saveSitemap($xml, $number = NULL){
         $counter ='';
         if(isset($number)) $counter = $number;
         $file = fopen('./sitemaps/'.$this->name.'/sitemap'.$counter.'.xml','w+');
@@ -76,15 +76,15 @@ class GenerateSitemap
         for($i=0; $i < $numberOfSitemaps; $i++){                    //handle the first sitemaps, with safe 50000 entry's
             $partLinks = array_splice($tempLinks, 0, 50000);        //$partLinks get the first 50000 entry's of the array $tempLinks and the first 50000 entry's were deleted in $templinks
             $xml = $this->getSitemap($partLinks);
-            $this->safeSitemap($xml, $i+1);
+            $this->saveSitemap($xml, $i+1);
         }
         if(count($tempLinks) > 0){
             $xml = $this->getSitemap($tempLinks);      //$tempLinks are now the remaining Links
-            $this->safeSitemap($xml, $numberOfSitemaps+1);
+            $this->saveSitemap($xml, $numberOfSitemaps+1);
         }
 
         $xml = $this->createMasterSitemap($numberOfSitemaps);
-        $this->safeSitemap($xml);
+        $this->saveSitemap($xml);
 
         if(file_exists('./sitemaps/'. $this->name . "/sitemap.zip")){
             unlink('./sitemaps/'. $this->name . "/sitemap.zip");
