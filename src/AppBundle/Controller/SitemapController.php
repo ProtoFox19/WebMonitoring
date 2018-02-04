@@ -36,7 +36,8 @@ class SitemapController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($newSitemapSetting);
             $em->flush();
-            return $this->redirectToRoute('sitemap_options',array('id' => $web->getId()));
+            //return $this->redirectToRoute('sitemap_options',array('id' => $web->getId()));
+            $sitemapSetting = $newSitemapSetting;
         }
 
         $form = $this->createForm(EditSitemapSettingsFormType::class, $sitemapSetting);
