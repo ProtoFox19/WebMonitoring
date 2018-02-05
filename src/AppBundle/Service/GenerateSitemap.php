@@ -137,6 +137,7 @@ class GenerateSitemap
             $xml.= "\t" ."\t" .'<loc>'. $link['url'] .'</loc>'. "\n";
             $xml.= "\t" ."\t" .'<changefreq>'. $changefreq .'</changefreq>'. "\n";
             $xml.= "\t" ."\t" .'<priority>'. $priority .'</priority>'. "\n";
+            if($link['lastMod']!='') $xml.= "\t" ."\t" .'<lastmod>'. $link['lastMod'] .'</lastmod>'. "\n";
             $xml.= "\t" .'</url>'."\n";
         }
 

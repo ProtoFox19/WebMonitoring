@@ -103,6 +103,7 @@ class Crawler
                 'url' => $url,
                 'visited' => false,
                 'is_external' => false,
+                'lastMod' => '',            //Own
             ];
 
             $fileextension = "/\.(zip|exe|pdf|png|jpg|jpeg|mpg|doc|xls|ppt|pps|ppsx|psd|rar|txt|mp3|mov|mp4|bmp|gif|ico)/i";
@@ -128,6 +129,12 @@ class Crawler
 
                     // Make sure the page is html
                     $contentType = $crawler->getHeader('Content-Type');
+                    $rawLastMod = $crawler->getHeader('Last-Modified');
+                    if(!is_null($rawLastMod) && !empty($rawLastMod)){
+                        $lastMod = date("Y-m-d",strtotime($rawLastMod[0]));
+                        $this->links[$url]['lastMod'] = $lastMod;
+                        //print_r($this->links[$url]['lastMod'] . "\n");
+                    }
                     if (strpos($contentType[0], 'text/html') !== false) {
 
                         // collect the links within the page
