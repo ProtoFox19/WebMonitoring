@@ -89,6 +89,7 @@ h1{
 
 .input-group-addon {
     color: #003A61;
+    min-width: 40px;
 }
 
 input.form-control, textarea.form-control{
