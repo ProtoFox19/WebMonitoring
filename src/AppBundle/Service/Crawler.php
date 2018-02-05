@@ -77,12 +77,18 @@ class Crawler
 
         try {
             //$this->testvariable[$this->j++] = memory_get_usage();
-            /*$bla = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
-            print_r($bla);*/
+            /*$memory = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
+            print_r($memory);*/
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //OWN Begin: the following if´s consider all types of url´s
-            if((strpos($url,"/") === 0 || strpos($url,"./") === 0 || strpos($url,"../") === 0)&& strpos($url, $baseUrl) === false){
+            if(strpos($url,"/") === 0 && strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;
                 //$url = $baseUrl . $url;
+            }
+            if(strpos($url,"./") === 0 && strpos($url, $baseUrl) === false){
+                $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . substr($url, 1) : $this->baseUrl . substr($url,1);
+            }
+            if(strpos($url,"../") === 0 && strpos($url, $baseUrl) === false){
+                $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . substr($url, 2) : $this->baseUrl . substr($url,2);
             }
             if((strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0) && strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $url : $this->baseUrl . "/" . $url;
@@ -92,7 +98,6 @@ class Crawler
             //$this->testvariablezwei[$this->k++] = $url . "  " . $maxDepth;
             //$this->testvariable[$this->j++] = $baseUrl;
             //$this->testvariable[$this->j++] = $url ."  ". microtime(true);
-
             $this->links[$url] = [
                 'status_code' => 0,
                 'url' => $url,
@@ -211,8 +216,14 @@ class Crawler
             // ToDo Checken ob href # ist
             $fullUrl ='';   //OWN Begin: because the $nodeUrl could have just a part url, the full url must be build
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
-            if((strpos($nodeUrl,"/") === 0 || strpos($nodeUrl,"./") === 0 || strpos($nodeUrl,"../") === 0)&& strpos($nodeUrl, $baseUrl) === false){
+            if(strpos($nodeUrl,"/") === 0 && strpos($nodeUrl, $baseUrl) === false){
                 $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $nodeUrl : $this->baseUrl . $nodeUrl;
+            }
+            if(strpos($nodeUrl,"./") === 0 && strpos($nodeUrl, $baseUrl) === false){
+                $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . substr($nodeUrl,1) : $this->baseUrl . substr($nodeUrl,1);
+            }
+            if(strpos($nodeUrl,"../") === 0 && strpos($nodeUrl, $baseUrl) === false){
+                $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . substr($nodeUrl,2) : $this->baseUrl . substr($nodeUrl,2);
             }
             if((strpos($nodeUrl,"http://") !== 0 && strpos($nodeUrl,"https://") !== 0 && strpos($nodeUrl,"www") !== 0 && strpos($nodeUrl,"/") !== 0 && strpos($nodeUrl,"./") !== 0 && strpos($nodeUrl,"../") !== 0) && strpos($nodeUrl, $baseUrl) === false){
                 $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $nodeUrl : $this->baseUrl . "/" . $nodeUrl;
@@ -245,10 +256,13 @@ class Crawler
                     }
                 }
             }           //Own End
-
+            $regex = "/^[a-z]+:(?!\/\/)/i";     // Mailto: or javascript: and so on
+            if(preg_match($regex, $nodeUrl)) $exclude = true;
+            $regexanchor = "/#(?!\!)/";         //For anchors, #! are okay
+            if(preg_match($regexanchor, $nodeUrl)) $exclude = true;
 
             // If we don't have it lets collect it
-            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL, because of Asynchronous searching of the spiders
+            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL,
                 $this->prereserveLinks[$nodeUrl] = $nodeUrl;    //OWN: set the temporal reserving
                 // set the basics
                 $currentLinks[$nodeUrl]['is_external'] = false;
