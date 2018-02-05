@@ -25,7 +25,7 @@ class Crawler
     private $prereserveLinks = [];  //Own
     private $excludedLinks =[];     //Own
     private $webService;            //Own
-    private $functionality;
+    private $functionality;         //Own
 
     public $testvariable = [];      //Own Variables for testing
     public $testvariablezwei = [];
@@ -105,42 +105,48 @@ class Crawler
                 'is_external' => false,
             ];
 
-            // Create a client and send out a request to a url
-            $client = new Client();
-            $crawler = $client->request('GET', $url,['allow_redirects' => false]);      //own don't allow redirects
+            $fileextension = "/\.(zip|exe|pdf|png|jpg|jpeg|mpg|doc|xls|ppt|pps|ppsx|psd|rar|txt|mp3|mov|mp4|bmp|gif|ico)/i";
+            if(!preg_match($fileextension, $url)) {
+                // Create a client and send out a request to a url
+                $client = new Client();
+                $crawler = $client->request('GET', $url,['allow_redirects' => false]);      //own don't allow redirects
 
-            // get the content of the request result
-            $html = $crawler->getBody()->getContents();
+                // get the content of the request result
+                $html = $crawler->getBody()->getContents();
 
-            //TODO wieder rausnehmen
-            //$this->testvariable[$this->j++] = $url;
+                //TODO wieder rausnehmen
+                //$this->testvariable[$this->j++] = $url;
 
-            // lets also get the status code
-            $statusCode = $crawler->getStatusCode();
+                // lets also get the status code
+                $statusCode = $crawler->getStatusCode();
 
-            // mark current url as visited
-            $this->links[$url]['visited'] = true;
-            // Set the status code
-            $this->links[$url]['status_code'] = $statusCode;
-            if ($statusCode == 200) {
+                // mark current url as visited
+                $this->links[$url]['visited'] = true;
+                // Set the status code
+                $this->links[$url]['status_code'] = $statusCode;
+                if ($statusCode == 200) {
 
-                // Make sure the page is html
-                $contentType = $crawler->getHeader('Content-Type');
-                if (strpos($contentType[0], 'text/html') !== false) {
+                    // Make sure the page is html
+                    $contentType = $crawler->getHeader('Content-Type');
+                    if (strpos($contentType[0], 'text/html') !== false) {
 
-                    // collect the links within the page
-                    $pageLinks = [];
-                    if (@$this->links[$url]['is_external'] == false) {
-                        $pageLinks = $this->extractLinks($html, $url);
+                        // collect the links within the page
+                        $pageLinks = [];
+                        if (@$this->links[$url]['is_external'] == false) {
+                            $pageLinks = $this->extractLinks($html, $url);
+                        }
+
+                        //TODO rausnehmen
+                        //$this->testvariable[$this->j++] = $pageLinks;
+                        //$this->testvariablezwei[$this->k++] = $maxDepth;
+
+                        // spawn spiders for the child links, marking the depth as decreasing, or send out the soldiers
+                        $this->spawn($pageLinks, $maxDepth - 1);
                     }
-
-                    //TODO rausnehmen
-                    //$this->testvariable[$this->j++] = $pageLinks;
-                    //$this->testvariablezwei[$this->k++] = $maxDepth;
-
-                    // spawn spiders for the child links, marking the depth as decreasing, or send out the soldiers
-                    $this->spawn($pageLinks, $maxDepth - 1);
                 }
+            } else{
+                $validfileextension  = "/\.(zip|pdf)/i";
+                if (preg_match($validfileextension, $url)) $this->links[$url]['visited'] = true;
             }
         } catch(\GuzzleHttp\Exception\RequestException $ex)  {
             // do nothing or something
@@ -213,7 +219,6 @@ class Crawler
         $dom->filter('a')->each(function(DomCrawler $node, $i) use (&$currentLinks) {
             // get the href
             $nodeUrl = $node->attr('href');
-            // ToDo Checken ob href # ist
             $fullUrl ='';   //OWN Begin: because the $nodeUrl could have just a part url, the full url must be build
             $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
             if(strpos($nodeUrl,"/") === 0 && strpos($nodeUrl, $baseUrl) === false){
@@ -255,11 +260,11 @@ class Crawler
                         }
                     }
                 }
-            }           //Own End
+            }
             $regex = "/^[a-z]+:(?!\/\/)/i";     // Mailto: or javascript: and so on
             if(preg_match($regex, $nodeUrl)) $exclude = true;
             $regexanchor = "/#(?!\!)/";         //For anchors, #! are okay
-            if(preg_match($regexanchor, $nodeUrl)) $exclude = true;
+            if(preg_match($regexanchor, $nodeUrl)) $exclude = true; //Own End
 
             // If we don't have it lets collect it
             if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL,
