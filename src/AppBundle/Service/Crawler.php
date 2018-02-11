@@ -51,7 +51,7 @@ class Crawler
         $this->prereserveLinks = array();
         $this->excludedLinks = array();*/
 
-        if($this->functionality === 'sitemap'){     //Own standart is sitemap, but for maybe for future functions the crawler is needed for other things with other needs
+        if($this->functionality === 'sitemap'){     //Own: standard is sitemap, but for future functions the crawler is needed for other things with other needs
             $web = $this->webService->getWebByNameOrDomain($url);
             $this->excludedLinks = preg_split('/\r\n|\r|\n/', $web->getSitemapSettings()->getNotIncludedPath());
         }
@@ -67,8 +67,8 @@ class Crawler
     }
 
     public function setLinksBack(){         //Own Begin: Because how Services works, only one instance is generated.
-        $this->links = array();             //When this instance is used to crawl more than one website, the links of the previous websites would also be in the links array's, because the constructor isn'´called twice
-        $this->prereserveLinks = array();   //therefor this function
+        $this->links = array();             //When this instance is used to crawl more than one website, the links of the previous websites would also be in the links array's, because the constructor isn't called twice
+        $this->prereserveLinks = array();   //therefor this function is build
         $this->excludedLinks = array();     //an other Method would be to set the array's in the function "crawl" back. because "crawl" initiates the whole process, reason why i´ve done it separate: i want to reserve the option, that i can crawl two sites and bundle the links (example: sitename.de and shop.sitename.de)
     }                                       //Own End
 
@@ -79,7 +79,7 @@ class Crawler
             //$this->testvariable[$this->j++] = memory_get_usage();
             /*$memory = $this->j++ . "\t" . memory_get_usage()/1024/1024 . ' mib ' . "\t\t\t" . $url . "\n";
             print_r($memory);*/
-            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //OWN Begin: the following if´s consider all types of url´s
+            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //Own Begin: the following if´s consider all types of url´s
             if(strpos($url,"/") === 0 && strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $url : $this->baseUrl . $url;
                 //$url = $baseUrl . $url;
@@ -93,8 +93,8 @@ class Crawler
             if((strpos($url,"http://") !== 0 && strpos($url,"https://") !== 0 && strpos($url,"www") !== 0 && strpos($url,"/") !== 0 && strpos($url,"./") !== 0 && strpos($url,"../") !== 0) && strpos($url, $baseUrl) === false){
                 $url = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $url : $this->baseUrl . "/" . $url;
                 //$url = $baseUrl . '/' . $url;
-            }//OWN End
-            //TODO rausnehmen
+            }//Own End
+            //TODO testing
             //$this->testvariablezwei[$this->k++] = $url . "  " . $maxDepth;
             //$this->testvariable[$this->j++] = $baseUrl;
             //$this->testvariable[$this->j++] = $url ."  ". microtime(true);
@@ -106,16 +106,16 @@ class Crawler
                 'lastMod' => '',            //Own
             ];
 
-            $fileextension = "/\.(zip|exe|pdf|png|jpg|jpeg|mpg|doc|xls|ppt|pps|ppsx|psd|rar|txt|mp3|mov|mp4|bmp|gif|ico)/i";
+            $fileextension = "/\.(zip|exe|pdf|png|jpg|jpeg|mpg|doc|xls|ppt|pps|ppsx|psd|rar|txt|mp3|mov|mp4|bmp|gif|ico)/i";    //Own
             if(!preg_match($fileextension, $url)) {
                 // Create a client and send out a request to a url
                 $client = new Client();
-                $crawler = $client->request('GET', $url,['allow_redirects' => false]);      //own don't allow redirects
+                $crawler = $client->request('GET', $url,['allow_redirects' => false]);      //Own: don't allow redirects
 
                 // get the content of the request result
                 $html = $crawler->getBody()->getContents();
 
-                //TODO wieder rausnehmen
+                //TODO testing
                 //$this->testvariable[$this->j++] = $url;
 
                 // lets also get the status code
@@ -129,12 +129,12 @@ class Crawler
 
                     // Make sure the page is html
                     $contentType = $crawler->getHeader('Content-Type');
-                    $rawLastMod = $crawler->getHeader('Last-Modified');
+                    $rawLastMod = $crawler->getHeader('Last-Modified'); //Own begin
                     if(!is_null($rawLastMod) && !empty($rawLastMod)){
                         $lastMod = date("Y-m-d",strtotime($rawLastMod[0]));
                         $this->links[$url]['lastMod'] = $lastMod;
                         //print_r($this->links[$url]['lastMod'] . "\n");
-                    }
+                    }   //Own end
                     if (strpos($contentType[0], 'text/html') !== false) {
 
                         // collect the links within the page
@@ -143,7 +143,7 @@ class Crawler
                             $pageLinks = $this->extractLinks($html, $url);
                         }
 
-                        //TODO rausnehmen
+                        //TODO testing
                         //$this->testvariable[$this->j++] = $pageLinks;
                         //$this->testvariablezwei[$this->k++] = $maxDepth;
 
@@ -152,7 +152,7 @@ class Crawler
                     }
                 }
             } else{
-                $validfileextension  = "/\.(zip|pdf)/i";
+                $validfileextension  = "/\.(zip|pdf)/i";        //Own: allow zip and pdf in the lists of Links, but don't "GET" the content
                 if (preg_match($validfileextension, $url)) $this->links[$url]['visited'] = true;
             }
         } catch(\GuzzleHttp\Exception\RequestException $ex)  {
@@ -165,7 +165,7 @@ class Crawler
 
     private function spawn($links, $maxDepth)
     {
-        //TODO wieder rausnehmen
+        //TODO testing
         //$this->testvariable[$this->j++] = $links;
 
         // if we hit the max - then its the end of the rope
@@ -181,7 +181,7 @@ class Crawler
                 // we really only care about links which belong to this domain
                 if (! empty($url) && ! $this->links[$url]['visited'] && ! $this->links[$url]['is_external']) {
                     // restart the process by sending out more soldiers!
-                    //TODO wieder rausnehmen
+                    //TODO testing
                     //$this->testvariable[$this->j++] = $this->links[$url]['url'];
                     //$this->testvariablezwei[$this->k++] = $maxDepth;
 
@@ -195,7 +195,7 @@ class Crawler
 
     private function checkIfExternal($url)
     {
-        //TODO wieder rausnehmen
+        //TODO testing
         //$this->testvariable[$this->j++] = $url;
 
         $baseUrl = str_replace(['http://', 'https://'], '', $this->baseUrl);
@@ -226,8 +226,8 @@ class Crawler
         $dom->filter('a')->each(function(DomCrawler $node, $i) use (&$currentLinks) {
             // get the href
             $nodeUrl = $node->attr('href');
-            $fullUrl ='';   //OWN Begin: because the $nodeUrl could have just a part url, the full url must be build
-            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl); //selbst hinzugefuegt
+            $fullUrl ='';   //Own Begin: because the $nodeUrl could have just a part url, the full url must be build
+            $baseUrl = str_replace(['http://', 'https://', '/'], '', $this->baseUrl);
             if(strpos($nodeUrl,"/") === 0 && strpos($nodeUrl, $baseUrl) === false){
                 $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . $nodeUrl : $this->baseUrl . $nodeUrl;
             }
@@ -240,15 +240,15 @@ class Crawler
             if((strpos($nodeUrl,"http://") !== 0 && strpos($nodeUrl,"https://") !== 0 && strpos($nodeUrl,"www") !== 0 && strpos($nodeUrl,"/") !== 0 && strpos($nodeUrl,"./") !== 0 && strpos($nodeUrl,"../") !== 0) && strpos($nodeUrl, $baseUrl) === false){
                 $fullUrl = substr($this->baseUrl, -1) == '/'? substr($this->baseUrl, 0, -1) . "/" . $nodeUrl : $this->baseUrl . "/" . $nodeUrl;
             }
-            if($fullUrl ==='') $fullUrl = $nodeUrl; //OWN End
-            //TODO wieder rausnehmen
+            if($fullUrl ==='') $fullUrl = $nodeUrl; //Own End
+            //TODO testing
             //$this->testvariable[$this->j++] = $fullUrl ."  ". microtime(true);
             /*if (isset($this->links[$fullUrl])) {
                 $this->testvariable[$this->j++] = $this->links[$fullUrl];
             }*/
 
             $exclude = false;                                       //Own Begin
-            if($this->functionality === 'sitemap'){                 //if the crawler is crawling for Sitemapgenerator, note excluded Links
+            if($this->functionality === 'sitemap'){                 //if the crawler is crawling for "CreateSitemapCommand", note excluded Links
                 foreach ($this->excludedLinks as $excludedLink){
                     if(!empty($excludedLink)){
                         if (substr($excludedLink, -1) == '*') {
@@ -270,18 +270,18 @@ class Crawler
             }
             $regex = "/^[a-z]+:(?!\/\/)/i";     // Mailto: or javascript: and so on
             if(preg_match($regex, $nodeUrl)) $exclude = true;
-            $regexanchor = "/#(?!\!)/";         //For anchors, #! are okay
+            $regexanchor = "/#(?!\!)/";         //For anchors, #! <= are okay
             if(preg_match($regexanchor, $nodeUrl)) $exclude = true; //Own End
 
             // If we don't have it lets collect it
-            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //OWN: there must be a temporal reserving variable for the NodeURL,
-                $this->prereserveLinks[$nodeUrl] = $nodeUrl;    //OWN: set the temporal reserving
+            if (! isset($this->links[$fullUrl]) && !isset($this->prereserveLinks[$nodeUrl]) && !$exclude) {  //Own: there must be a temporal reserving variable for the NodeURL,
+                $this->prereserveLinks[$nodeUrl] = $nodeUrl;    //Own: set the temporal reserving
                 // set the basics
                 $currentLinks[$nodeUrl]['is_external'] = false;
                 $currentLinks[$nodeUrl]['url'] = $nodeUrl;
                 $currentLinks[$nodeUrl]['visited'] = false;
 
-                //TODO wieder rausnehmen
+                //TODO testing
                 //$this->testvariablezwei[$this->k++] = $nodeUrl ."  ". microtime(true);
 
 

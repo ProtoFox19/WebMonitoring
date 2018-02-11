@@ -1,8 +1,8 @@
 /*
 @author: Christoph Suhr
-Information: I sorted this stylesheet in Sections and named them after Sitenames.
-They begin with the Name in Capital Letters and end with the Name in Capital Letters and "END".
-Mediaquery´s are allways on the end of a Sitesection, except the "LOGIN" Section.
+Information: I sorted this stylesheet in sections and named them after special parts of the website.
+They begin with the name in capital letters and end with the name in capital letters and "END".
+Mediaquery´s are allways on the end of a part, except the "LOGIN" and "container".
 
 */
 body{

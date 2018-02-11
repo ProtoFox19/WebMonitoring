@@ -6,6 +6,7 @@
  * Time: 09:48
  *
  * @author Christoph Suhr
+ * Creates one or more Sitemaps with master Sitemap from given Links
  */
 
 namespace AppBundle\Service;

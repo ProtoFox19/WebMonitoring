@@ -105,7 +105,7 @@ class SitemapController extends Controller
         $crawler = $this->get(Crawler::class);
 
         $dom = $crawler->crawl($web->getDomain(), 10);
-        //TODO rausnehmen
+
         $test = $dom->testvariable;
         $testzwei = $dom->testvariablezwei;
         $i=0;
@@ -135,7 +135,7 @@ class SitemapController extends Controller
      * @return
      */
     public function createSitemapAction(Web $web, KernelInterface $kernel){
-        $test='';
+       /* $test='';
         $testzwei ='';
         $content ='';
         $domain = str_replace(['http://', 'https://', '.de', '.com', 'www.'], '', $web->getDomain());
@@ -143,7 +143,7 @@ class SitemapController extends Controller
         $process->setWorkingDirectory('../');
         $process->run();
 
-        /*  $application = new Application($kernel);
+          $application = new Application($kernel);
           $application->setAutoExit(false);
 
           $input = new ArrayInput(array(
@@ -182,7 +182,7 @@ class SitemapController extends Controller
         } else {
             $testzwei = 'wut';
             exec("./" . "php" . " " . escapeshellarg("C:\xampp\htdocs\Symfony\WebMonitoring\src\AppBundle\Service\GenerateSitemap.php") . " > /dev/null &");
-        }*/
+        }
 
         //$this->addFlash('success', 'The Sitemap will be generated. It may take some time.' . $process);
         //return $this->redirectToRoute('homepage');
@@ -191,6 +191,6 @@ class SitemapController extends Controller
             'links' => $process->getOutput(),
             'test' => $test,
             'testzwei' => $testzwei
-        ]);
+        ]);*/
     }
 }

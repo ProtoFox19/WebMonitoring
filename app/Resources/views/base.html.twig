@@ -31,7 +31,7 @@
                             <ul class="navigation">
                                 <li {% if app.request.get('_route')  == 'homepage' %}class="active"{% endif %}><a href="{{ path('homepage') }}" title="Startpage">Start</a></li>
                                 {% if is_granted('ROLE_ADMIN') %}<li {% if  app.request.get('_route') == 'fos_user_registration_register' %}class="active"{% endif %}><a href="{{ path('fos_user_registration_register') }}" title="">New User</a></li>{% endif %}
-                                {% if is_granted('ROLE_ADMIN') %} <li {% if app.request.get('_route') == 'settings' %}class="active"{% endif %}><a href="" title="">Settings</a></li>{% endif %}
+                                {% if is_granted('ROLE_ADMIN') %} <li {% if app.request.get('_route') == 'settings' %}class="active"{% endif %}><a href="" title="">Settings</a></li>{% endif %} <!-- Reserved Link -->
                                 <li {% if app.request.get('_route') == 'fos_user_change_password' %}class="active"{% endif %}><a href="{{ path('fos_user_change_password') }}" title="">Change Password</a></li>
                                 <li><a href="{{ path('fos_user_security_logout') }}" title="">Logout</a></li>
                             </ul>

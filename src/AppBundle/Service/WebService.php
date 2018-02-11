@@ -50,4 +50,13 @@ class WebService
         }
         return $web;
     }
+
+    /**
+     * @return Web[]
+     */
+    public function getAllActiveWebs(){
+        $webs = $this->em->getRepository('AppBundle:Web')
+            ->findAllActiveWebs();
+        return $webs;
+    }
 }

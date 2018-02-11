@@ -25,4 +25,15 @@ class WebRepository extends EntityRepository
             ->execute();
     }
 
+    /**
+     * @return Web[]
+     */
+    public function findAllActiveWebs()
+    {
+        return $this->createQueryBuilder('webs')
+            ->andWhere('webs.active = :isActive')
+            ->setParameter('isActive', true)
+            ->getQuery()
+            ->execute();
+    }
 }
