@@ -24,7 +24,7 @@ class CreateSitemapCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this
+        $this//Test
             // the name of the command (the part after "bin/console")
             ->setName('app:create-Sitemap')
 
