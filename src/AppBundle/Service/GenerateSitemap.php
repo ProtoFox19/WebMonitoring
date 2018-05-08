@@ -134,6 +134,7 @@ class GenerateSitemap
                     }
                 }
             }
+            $link['url'] = str_replace(array('&','<','>','"','\''),array('&amp;','&lt;','&gt;','&quot;', '&apos;'),$link['url']);
             $xml.= "\t" .'<url>'."\n";
             $xml.= "\t" ."\t" .'<loc>'. $link['url'] .'</loc>'. "\n";
             $xml.= "\t" ."\t" .'<changefreq>'. $changefreq .'</changefreq>'. "\n";
