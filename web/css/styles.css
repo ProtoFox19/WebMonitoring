@@ -16,8 +16,18 @@ a, a:visited {
     text-decoration: none;
 }
 
+a.btn, a:visited.btn{
+    color: #ffffff;
+    text-decoration: none;
+}
+
 a:hover, a:focus{
     color: #f7a800;
+    text-decoration: none;
+}
+
+a:hover.btn, a:focus.btn{
+    color: rgba(245, 245, 245, 1);
     text-decoration: none;
 }
 

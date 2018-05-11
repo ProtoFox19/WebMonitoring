@@ -86,10 +86,16 @@
         <div class="alert alert-info">When the Sitemap Options aren't active, the sitemap.xml will not generate automatically!</div>
 
         <button type="submit" class="btn btn-primary">Save</button>
-        {% if lastMod is not empty %}<a href="{{ path('sitemapDownload', {'id': web.id}) }}"><div class="btn btn-warning">Download Sitemap</div></a> - last modify: {{ lastMod }}{% endif %}
+        {#{% if lastMod is not empty %}<a href="{{ path('sitemapDownload', {'id': web.id}) }}"><div class="btn btn-warning">Download Sitemap</div></a> - last modify: {{ lastMod }}{% endif %}#}
     </div>
     {{ form_end(editSitemapForm) }}
-
+    <hr>
+    <div class="row">
+        <div class="col-12">
+            <a href="{{ path('create_sitemap', {'id': web.id }) }}" class="btn btn-primary">Create Sitemap (asynchrone)</a>
+            {% if lastMod is not empty %}<a href="{{ path('sitemapDownload', {'id': web.id}) }}"><div class="btn btn-warning">Download Sitemap</div></a> - last modify: {{ lastMod }}{% endif %}
+        </div>
+    </div><br>
 
 
     <div class="alert alert-danger">The following links are for testing!</div>
