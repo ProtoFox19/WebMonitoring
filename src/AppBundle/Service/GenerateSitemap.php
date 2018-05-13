@@ -26,7 +26,8 @@ class GenerateSitemap
     }
 
     public function generateSitemap($links, $domain){
-        sort($links);
+        //sort($links);
+        usort($links, array($this, "comp"));
         $this->links = $links;
         $this->name = str_replace(['http://', 'https://', 'www.'], '', $domain);
         $this->getNotablyPath($domain);
@@ -50,6 +51,11 @@ class GenerateSitemap
                 exit("cannot open <$zipname>\n");
             }
         }
+    }
+
+    private function comp($a, $b)       //sort by the "Name" of the URL's
+    {
+        return strcmp($a["url"], $b["url"]);
     }
 
     private function getNotablyPath($domain){
